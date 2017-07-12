@@ -1,0 +1,11 @@
+common.hxml
+
+-swf bin/flash/program.swf
+-swf-version 12.0
+-swf-header 1136:640:100:000000
+#-as3 bin/flash/testappAS/
+
+-lib monosyne-flash
+
+# TODO:
+-resource ../../monosyne-flash/src/main/haxe/monosyne/platform/flash/stage3d/generator/agal_shaders.json@agal_shaders.json

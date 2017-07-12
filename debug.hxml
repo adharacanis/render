@@ -1,0 +1,13 @@
+-debug
+-D profile
+-D dev_build
+-D async_debug
+-D const_structs
+
+-D fdb
+-D advanced-telemetry
+-D network-sandbox
+-D native-trace
+-D source-map-content
+
+--macro addMetadata('@:expose', 'haxe.CallStack')

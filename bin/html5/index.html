@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript" src="lib/source-map.min.js"></script>
+    <script type="text/javascript" src="lib/webfont.js"></script>
+    <script type="text/javascript" src="./program.js"></script>
+	<canvas id="testView" width=1 height=1></canvas>
+
+		
+	<script type="text/javascript">
+        var sourceMapPath = 'program.js.map';
+
+        function resize(width, height) {
+            if(width == undefined) width = 1366;
+            if(height == undefined) height = 768;
+            var gameView = document.getElementById('gameview');
+            gameView.width = width;
+            gameView.height = height;
+            gameView.dispatchEvent(new CustomEvent('resize'));
+        }
+
+
+        function attachSourceMap(rawSourceMap) 
+		{
+            var smc = new sourceMap.SourceMapConsumer(rawSourceMap);
+		}
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange= function() {
+            if (xhttp.readyState == 4 && xhttp.status == 200) {
+                attachSourceMap(xhttp.responseText);
+            }
+        };
+        xhttp.open("GET", sourceMapPath, true);
+        xhttp.send();
+
+    </script>
+	
+</head>
+<body>
+    <canvas id="gameview" width=1366 height=768></canvas>
+    <p id="report">Test</p>
+	
+		<script type="text/JavaScript">
+		
+		function webglInfo(gl)
+		{
+				var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {};
+
+				var report = "";
+				report += ("<h1>perfomance</h1> <br>");
+				for (var value in performance.memory) {
+					report += (value + " = " + performance.memory[value] + "<br>");
+				}
+
+				report += ("<br><br><br>");
+
+				report += "RENDERER: " + (gl.getParameter(gl.RENDERER) + "<br>");
+				report += "VENDOR: " + (gl.getParameter(gl.VENDOR) + "<br>");
+				report += "vendor: " + (getUnmaskedInfo(gl).vendor + "<br>");
+				report += "renderer: " + (getUnmaskedInfo(gl).renderer + "<br>");
+
+				document.getElementById("report").innerHTML = report;
+
+				function getUnmaskedInfo(gl) {
+					var unMaskedInfo = {
+						renderer: '',
+						vendor: ''
+					};
+
+					var dbgRenderInfo = gl.getExtension("WEBGL_debug_renderer_info");
+					if (dbgRenderInfo != null) {
+						unMaskedInfo.renderer = gl.getParameter(dbgRenderInfo.UNMASKED_RENDERER_WEBGL);
+						unMaskedInfo.vendor   = gl.getParameter(dbgRenderInfo.UNMASKED_VENDOR_WEBGL);
+					}
+
+					return unMaskedInfo;
+				}
+		}
+        </script>
+</body>
+</html>

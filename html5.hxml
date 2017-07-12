@@ -1,0 +1,7 @@
+common.hxml
+debug.hxml
+
+-D html5
+-js bin/html5/program.js
+
+#-lib demo_html5

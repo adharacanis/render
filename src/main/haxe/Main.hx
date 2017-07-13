@@ -1,9 +1,12 @@
 package ;
 import events.DataEvent;
 import external.DataLoader;
+import external.data.PPXData;
 import haxe.Timer;
 import haxe.io.ArrayBufferView;
+import haxe.io.Bytes;
 import haxe.io.UInt32Array;
+import texture.PPXTexture;
 
 import js.html.ArrayBuffer;
 import js.html.XMLHttpRequestResponseType;
@@ -27,6 +30,7 @@ class Main
 	var texture:Texture;
 	var gl:RenderingContext;
 	var canvas:CanvasElement;
+	var ppxTexture:PPXTexture;
 
 	public static function main()
 	{
@@ -36,17 +40,15 @@ class Main
 	public function new() 
 	{
 		var loader:DataLoader = new DataLoader();
-		loader.addEventListener(DataEvent.ON_LOAD, onDataLoded);
-		loader.load("leaf.png", XMLHttpRequestResponseType.ARRAYBUFFER);
-		
-		
+		loader.addEventListener(DataEvent.ON_LOAD, onDataLoded2);
+		loader.load("leaf.ppx", XMLHttpRequestResponseType.ARRAYBUFFER);
 	}
 	
-	private function onDataLoded(e:DataEvent):Void 
-	{
-		var data:ArrayBufferView = cast e.data;
-		var data2:ArrayBuffer = cast e.data;
-		var buffer:UInt32Array = cast data2;
+	private function onDataLoded2(e:DataEvent):Void {
+		var bytes:Bytes = Bytes.allocJs(e.data.length, e.data);
+		
+		var data:PPXData = new PPXData(bytes);
+		ppxTexture = new PPXTexture(data);
 		
 		canvas = cast Browser.document.getElementById("gameview");
 		gl = canvas.getContextWebGL({
@@ -58,39 +60,17 @@ class Main
 			stencil: false
 		});
 		
-		var colorSpace = 15;
-		var rSize = 4;
-		var gSize = 4;
-		var bSize = 4;
-		
-		var textureSize:Int = 32;
-		var data3:Array<Int> = new Array<Int>();
-		var c:Int = 0;
-		for (i in 0...textureSize)
-		{
-			for (j in 0...textureSize)
-			{
-				var r = Math.ceil(colorSpace / textureSize * i);
-				var g = Math.ceil(colorSpace / textureSize * (textureSize - i));
-				var b = Math.ceil(colorSpace / textureSize * j);
-				
-				data3[c++]  = (r << (16 - rSize)) | (g << (16 - rSize - gSize)) | (b << (16 - rSize - gSize - bSize)) | 1;
-			}
-		}
-		//3075
-		//4096 - 4096 - 2048 - 2048
-		texture = gl.createTexture();
-		gl.bindTexture(GL.TEXTURE_2D, texture);
-		gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, textureSize, textureSize, 0, GL.RGBA, GL.UNSIGNED_SHORT_4_4_4_4, new Uint16Array(data3));
-		gl.bindTexture(GL.TEXTURE_2D, null);
-		gl.flush();
-		
-		 var vertices = [
-            -0.5, 0.5, 0.0,
-            -0.5, -0.5, 0.0, 
-            0.5, -0.5, 0.0, 
-            0.5, 0.5, 0.0 
-         ];
+		ppxTexture.uploadToGL(gl);
+		prepareToRender();
+	}
+	
+	private function prepareToRender() {
+		var vertices = [
+			-0.5, 0.5, 0.0,
+			-0.5, -0.5, 0.0, 
+			0.5, -0.5, 0.0, 
+			0.5, 0.5, 0.0 
+		];
           
 		var indices = [3, 2, 1, 3, 1, 0];
 		
@@ -153,6 +133,51 @@ class Main
 		
 		var timer:Timer = new Timer(60);
 		timer.run = draw;
+	}
+	
+	private function onDataLoded(e:DataEvent):Void 
+	{
+		var data:ArrayBufferView = cast e.data;
+		var data2:ArrayBuffer = cast e.data;
+		var buffer:UInt32Array = cast data2;
+		
+		canvas = cast Browser.document.getElementById("gameview");
+		gl = canvas.getContextWebGL({
+			alpha: false,
+			antialias: false,
+			depth: false,
+			premultipliedAlpha: false,
+			preserveDrawingBuffer: false,
+			stencil: false
+		});
+		
+		var colorSpace = 15;
+		var rSize = 4;
+		var gSize = 4;
+		var bSize = 4;
+		
+		var textureSize:Int = 32;
+		var data3:Array<Int> = new Array<Int>();
+		var c:Int = 0;
+		for (i in 0...textureSize)
+		{
+			for (j in 0...textureSize)
+			{
+				var r = Math.ceil(colorSpace / textureSize * i);
+				var g = Math.ceil(colorSpace / textureSize * (textureSize - i));
+				var b = Math.ceil(colorSpace / textureSize * j);
+				
+				data3[c++]  = (r << (16 - rSize)) | (g << (16 - rSize - gSize)) | (b << (16 - rSize - gSize - bSize)) | 1;
+			}
+		}
+		//3075
+		//4096 - 4096 - 2048 - 2048
+		//2048
+		texture = gl.createTexture();
+		gl.bindTexture(GL.TEXTURE_2D, texture);
+		gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, textureSize, textureSize, 0, GL.RGBA, GL.UNSIGNED_SHORT_4_4_4_4, new Uint16Array(data3));
+		gl.bindTexture(GL.TEXTURE_2D, null);
+		gl.flush();
 		
 		untyped __js__('webglInfo({0});', gl);
 	}
@@ -182,7 +207,7 @@ class Main
 		gl.enableVertexAttribArray(texcoordLocation);
 		gl.vertexAttribPointer(texcoordLocation, 2, GL.FLOAT, false, 0, 0);
 		
-		gl.bindTexture(GL.TEXTURE_2D, texture);
+		ppxTexture.setToContext(gl);
 		
 		gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
 		gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);

@@ -1,7 +1,7 @@
 package texture;
 
 @:enum
-abstract TextureDataFormat() 
+abstract TextureDataFormat(Int) from Int to Int
 {
 	var BYTE = 5121;
 	var BYTE_565 = 33635;

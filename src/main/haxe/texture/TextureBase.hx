@@ -1,9 +1,10 @@
 package texture;
+import gl.GL;
 
 class TextureBase 
 {
-	public var format:TextureFormat;
-	public var dataFormat:TextureDataFormat;
+	public var textureFormat:TextureFormat = TextureFormat.RGBA;
+	public var dataFormat:TextureDataFormat = TextureDataFormat.BYTE_4444;
 	
 	public var width:Int;
 	public var height:Int;
@@ -24,5 +25,10 @@ class TextureBase
 	function get_gpuMemorySize():Float 
 	{
 		return 0;
+	}
+	
+	public function uploadToGL(gl:GL):Void
+	{
+		
 	}
 }

@@ -1,0 +1,7 @@
+*.png
+*.mcmeta
+*.ppx
+.gradle
+program.js
+program.js.map
+/bin

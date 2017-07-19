@@ -1,0 +1,6 @@
+package gl;
+
+interface IMaterialContext 
+{
+  
+}

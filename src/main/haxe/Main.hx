@@ -21,6 +21,7 @@ import js.html.Uint8Array;
 import js.html.Uint16Array;
 import js.html.Float32Array;
 
+@:access(haxe.io.Bytes)
 class Main 
 {
 	var shaderProgram:Program;
@@ -45,7 +46,8 @@ class Main
 	}
 	
 	private function onDataLoded2(e:DataEvent):Void {
-		var bytes:Bytes = Bytes.allocJs(e.data.length, e.data);
+		trace(e.data);
+		var bytes:Bytes = new Bytes(e.data);
 		
 		var data:PPXData = new PPXData(bytes);
 		ppxTexture = new PPXTexture(data);

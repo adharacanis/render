@@ -5,8 +5,9 @@
     <title></title>
     <script type="text/javascript" src="lib/source-map.min.js"></script>
     <script type="text/javascript" src="lib/webfont.js"></script>
-    <script type="text/javascript" src="./program.js"></script>
+  
 	<canvas id="testView" width=1 height=1></canvas>
+	<canvas id="gameview" width=1366 height=768></canvas>
 
 		
 	<script type="text/javascript">
@@ -40,11 +41,9 @@
 	
 </head>
 <body>
-    <canvas id="gameview" width=1366 height=768></canvas>
+	<script type="text/javascript" src="./program.js"></script>
     <p id="report">Test</p>
-	
 		<script type="text/JavaScript">
-		
 		function webglInfo(gl)
 		{
 				var performance = window.performance || window.mozPerformance || window.msPerformance || window.webkitPerformance || {};

@@ -1,16 +1,40 @@
 package geometry;
 
-import haxe.ds.Vector;
+import gl.bufferContext.BufferContext;
+import gl.bufferContext.IndexBuffer;
+import gl.bufferContext.VertexBuffer;
 
-class BaseGeometry implements IGeometry 
+class BaseGeometry
 {
-	private var indices:Vector<UInt>;
-	private var vertices:Vector<Float>;
-	private var uvs:Vector<Float>;
+	private var indices:Array<UInt>;
+	private var vertices:Array<Float>;
+	private var uvs:Array<Float>;
+	
+	public var numVertices:Int;
+	public var uvsCount:Int;
+	
+	public var _init:Bool;
+		
+	public var minX:Float = 0;
+	public var maxX:Float = 0;
+	public var minY:Float = 0;
+	public var maxY:Float = 0;
+
+	public var width:Float;
+	public var height:Float;
+
+	public var verticesCount:Int = 0;
+	public var trianglesCount:Int = 0;
+	
+	private var geometryContext:BufferContext;
+	
+	var indexBuffer:IndexBuffer;
+	var vertexBuffer:VertexBuffer;
 	
 	public function new() 
 	{
-		
+		vertices = [];
+		indices = [];
 	}
 	
 	/**
@@ -19,9 +43,12 @@ class BaseGeometry implements IGeometry
 	 * @param	v2 - vertex index #2
 	 * @param	v3 - vertex index #3
 	 */
-	public function mapTriangle(v1:int, v2:int, v3:int):void
+	public function mapTriangle(v1:Int, v2:Int, v3:Int)
 	{
-		indices.push(v1, v2, v3);
+		indices.push(v1);
+		indices.push(v2);
+		indices.push(v3);
+		
 		trianglesCount++;
 	}
 	
@@ -32,7 +59,7 @@ class BaseGeometry implements IGeometry
 	 * @param	v2 - vertex index #2
 	 * @param	v3 - vertex index #3
 	 */
-	public function updateTriangleMap(i:int, v1:int, v2:int, v3:int):void 
+	public function updateTriangleMap(i:Int, v1:Int, v2:Int, v3:Int) 
 	{
 		i *= 3;
 		indices[i] = v1;
@@ -47,7 +74,7 @@ class BaseGeometry implements IGeometry
 	 * @param	u - vertex U value
 	 * @param	v - vertex V value
 	 */
-	public function addVertexAndUV(x:Number, y:Number, u:Number, v:Number):void
+	public function addVertexAndUV(x:Float, y:Float, u:Float, v:Float)
 	{
 		minX = Math.min(x, minX);
 		maxX = Math.max(x, maxX);
@@ -60,7 +87,10 @@ class BaseGeometry implements IGeometry
 		verticesCount += 2;
 		uvsCount += 2;
 		
-		vertices.push(x, y, u, v);
+		vertices.push(x);
+		vertices.push(y);
+		vertices.push(u);
+		vertices.push(v);
 	}
 	
 	/**
@@ -71,7 +101,7 @@ class BaseGeometry implements IGeometry
 	 * @param	u - vertex U value
 	 * @param	v - vertex V value
 	 */
-	public function setVertexAndUV(i:int, x:Number, y:Number, u:Number, v:Number):void
+	public function setVertexAndUV(i:Int, x:Float, y:Float, u:Float, v:Float):Void
 	{
 		minX = Math.min(x, minX);
 		maxX = Math.max(x, maxX);
@@ -95,7 +125,7 @@ class BaseGeometry implements IGeometry
 	 * @param	x - vertex X value
 	 * @param	y - vertex Y value
 	 */
-	public function setVertex(i:int, x:Number, y:Number):void
+	public function setVertex(i:Int, x:Float, y:Float)
 	{
 		minX = Math.min(x, minX);
 		maxX = Math.max(x, maxX);
@@ -115,12 +145,14 @@ class BaseGeometry implements IGeometry
 	 * @param	v - v value offset
 	 * @param	updateBuffer - if set to true then UV buffer will be reupload
 	 */
-	public function addUVStride(u:Number, v:Number, updateBuffer:Boolean = true):void
+	public function addUVStride(u:Float, v:Float, updateBuffer:Bool = true)
 	{
-		for (var i:int = 0; i < verticesCount; i+=4)
+		var i:Int = 0;
+		while(i < verticesCount)
 		{
 			vertices[i + 2] += u;
 			vertices[i + 3] += v;
+			i += 4;
 		}
 		
 		if(updateBuffer)
@@ -133,7 +165,7 @@ class BaseGeometry implements IGeometry
 	 * @param	u - vertex U value
 	 * @param	v - vertex V value
 	 */
-	public function setUV(i:int, u:Number, v:Number):void
+	public function setUV(i:Int, u:Float, v:Float)
 	{
 		vertices[i + 2] = u;
 		vertices[i + 3] = v;
@@ -143,7 +175,7 @@ class BaseGeometry implements IGeometry
 	 * Call on render phase it need to set render support and update buffers if it neccessarry also set buffers to context
 	 * @param	geometryContext
 	 */
-	public function setToContext(geometryContext:GeometryContext):void
+	public function setToContext(geometryContext:BufferContext)
 	{
 		if (!_init)
 			init(geometryContext);
@@ -155,66 +187,66 @@ class BaseGeometry implements IGeometry
 	 * Set buffers to context at 0(x, y values), 1(u, v values)
 	 * @param	geometryContext
 	 */
-	private function setBuffers(geometryContext:GeometryContext):void 
+	private function setBuffers(geometryContext:BufferContext) 
 	{
-		geometryContext.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
-		geometryContext.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
+		//geometryContext.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
+		//geometryContext.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
 	}
 	
 	/**
 	 * fully reupload UV buffer
 	 */
-	public function updateUV():void
+	public function updateUV()
 	{
-		uploadVertexBuffer(verticesCount / 2);
+		uploadVertexBuffer(Std.int(verticesCount / 2));
 	}
 	
 	/**
 	 * Upload/reupload vertex buffer or just part of buffer
 	 * @param	offset - start vertex index
-	 * @param	length - number of vertices to upload
+	 * @param	length - Float of vertices to upload
 	 */
-	public function uploadVertexBuffer(offset:int = 0, length:int = 0):void
+	public function uploadVertexBuffer(offset:Int = 0, length:Int = 0)
 	{
-		if (!vertexBuffer)
+		if (vertexBuffer == null)
 			return;
 			
 		if (length == 0)
 			length = numVertices;
 		
-		geometryContext.uploadVertexBuffer(vertexBuffer, vertices, offset, length);
+		geometryContext.uploadBufferFromArray(vertexBuffer, vertices, offset, length);
 	}
 	
 	/**
 	 * Upload/reupload index buffer or just set part of buffer
 	 * @param	offset - start index of indices
-	 * @param	length - number of indices to upload
+	 * @param	length - Float of indices to upload
 	 */
-	public function uploadIndexBuffer(offset:int = 0, length:int = 0):void
+	public function uploadIndexBuffer(offset:Int = 0, length:Int = 0)
 	{
-		if (!indexBuffer)
+		if (indexBuffer == null)
 			return;
 			
 		if (length == 0)
 			length = numVertices;
 		
-		geometryContext.uploadIndexBuffer(indexBuffer, indices, offset, length);
+		geometryContext.uploadBufferFromArray(indexBuffer, indices, offset, length);
 	}
 	
 	/**
 	 * Init operation. Create buffers and upload them first time
 	 * @param	geometryContext
 	 */
-	private function init(geometryContext:GeometryContext):void 
+	private function init(geometryContext:BufferContext) 
 	{
 		_init = true;
 		
 		this.geometryContext = geometryContext;
 		
-		numVertices = vertices.length / 4;
+		numVertices = Std.int(vertices.length / 4);
 		
 		vertexBuffer = geometryContext.createVertexBuffer(numVertices, 4);
-		indexBuffer = geometryContext.createIndexBuffer(indices.length);
+		indexBuffer = geometryContext.createIndexBuffer(indices.length, 1);
 		
 		uploadVertexBuffer(0, numVertices);
 		uploadIndexBuffer(0, indices.length);
@@ -223,12 +255,12 @@ class BaseGeometry implements IGeometry
 	/**
 	 * Fully dispose geometry, release GPU memory and destroy buffers
 	 */
-	public function dispose():void 
+	public function dispose() 
 	{
-		if (geometryContext)
+		if (geometryContext != null)
 		{
-			geometryContext.disposeIndexBuffer(indexBuffer)
-			geometryContext.disposeVertexBuffer(vertexBuffer)
+			geometryContext.disposeBuffer(indexBuffer);
+			geometryContext.disposeBuffer(vertexBuffer);
 		}
 	}
 }

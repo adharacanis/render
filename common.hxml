@@ -1,6 +1,8 @@
 -lib format
 
--cp src/main/haxe
+-cp src/main/renderer/haxe
+-cp src/main/application/haxe
+
 -main Main
 
 -dce full

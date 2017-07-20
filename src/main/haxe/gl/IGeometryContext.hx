@@ -1,6 +1,0 @@
-package gl;
-
-interface IGeometryContext 
-{
-  
-}

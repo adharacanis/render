@@ -3,6 +3,9 @@
 -cp src/main/renderer/haxe
 -cp src/main/application/haxe
 
+-resource vert.glsl@vert
+-resource frag.glsl@frag
+
 -main Main
 
 -dce full

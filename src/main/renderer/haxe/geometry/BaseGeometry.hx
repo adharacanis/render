@@ -28,8 +28,8 @@ class BaseGeometry
 	
 	private var geometryContext:BufferContext;
 	
-	var indexBuffer:IndexBuffer;
-	var vertexBuffer:VertexBuffer;
+	public var indexBuffer:IndexBuffer;
+	public var vertexBuffer:VertexBuffer;
 	
 	public function new() 
 	{
@@ -113,8 +113,8 @@ class BaseGeometry
 		
 		i *= 4;
 		
-		vertices[i] = x;
-		vertices[i + 1] = y;
+		vertices[i] = x * 100;
+		vertices[i + 1] = y * 100;
 		vertices[i + 2] = u;
 		vertices[i + 3] = v;
 	}
@@ -135,8 +135,11 @@ class BaseGeometry
 		width = Math.abs(minX - maxX);
 		height = Math.abs(minY - maxY);
 		
-		vertices[i] = x;
-		vertices[i + 1] = y;
+		i *= 3;
+		
+		vertices[i] = x * 1;
+		vertices[i + 1] = y * 1;
+		vertices[i + 2] = 1.0;
 	}
 	
 	/**
@@ -230,7 +233,8 @@ class BaseGeometry
 		if (length == 0)
 			length = numVertices;
 		
-		geometryContext.uploadBufferFromArray(indexBuffer, indices, offset, length);
+		//geometryContext.uploadBufferFromArray(indexBuffer, indices, offset, length);
+		geometryContext.uploadBufferFromArray16(indexBuffer, indices, offset, length);
 	}
 	
 	/**
@@ -243,9 +247,9 @@ class BaseGeometry
 		
 		this.geometryContext = geometryContext;
 		
-		numVertices = Std.int(vertices.length / 4);
+		numVertices = Std.int(vertices.length / 6);
 		
-		vertexBuffer = geometryContext.createVertexBuffer(numVertices, 4);
+		vertexBuffer = geometryContext.createVertexBuffer(numVertices, 6);
 		indexBuffer = geometryContext.createIndexBuffer(indices.length, 1);
 		
 		uploadVertexBuffer(0, numVertices);

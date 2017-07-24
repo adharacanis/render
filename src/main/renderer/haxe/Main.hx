@@ -100,15 +100,7 @@ class Main
 		gl.bufferData(GL.ARRAY_BUFFER, new Float32Array(uvs), GL.STATIC_DRAW);
 		gl.bindBuffer(GL.ARRAY_BUFFER, null);
 
-		var vertCode =
-				'attribute vec2 a_texcoord;'  + 
-				'attribute vec3 coordinates;' + 
-				'varying vec2 v_texcoord;'    +
-				'void main(void) {' + 
-									' gl_Position = vec4(coordinates, 1.0);' + 
-									' v_texcoord = a_texcoord;'
-									+ '}';
-
+		var vertCode = haxe.Resource.getString("vert");
 		var vertShader = gl.createShader(GL.VERTEX_SHADER);
 
 		gl.shaderSource(vertShader, vertCode);
@@ -116,13 +108,7 @@ class Main
 
 		
 		
-		var fragCode = 
-						'precision mediump float;' + 
-						'varying vec2 v_texcoord;' + 
-						'uniform sampler2D u_texture;' + 	
-						'void main(void) {' + 
-											'gl_FragColor = texture2D(u_texture, v_texcoord);'
-											+ '}';
+		var fragCode = haxe.Resource.getString("frag");
 
 		var fragShader = gl.createShader(GL.FRAGMENT_SHADER);
 		gl.shaderSource(fragShader, fragCode);
@@ -186,39 +172,29 @@ class Main
 	
 	private function draw():Void
 	{
-		gl.clearColor(0.5, 0.5, 0.5, 0.9);
-		gl.enable(GL.DEPTH_TEST); 
-		gl.clear(GL.COLOR_BUFFER_BIT);
 		gl.viewport(0, 0, canvas.height, canvas.height);
 		
 		gl.useProgram(shaderProgram);
 		
-		var positionLocation = gl.getAttribLocation(shaderProgram, "coordinates");
-		var texcoordLocation = gl.getAttribLocation(shaderProgram, "a_texcoord");
-		var textureLocation = gl.getUniformLocation(shaderProgram, "u_texture");
-		
-		gl.bindBuffer(GL.ARRAY_BUFFER, positionBuffer);
-		gl.enableVertexAttribArray(positionLocation);
 		gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, Index_Buffer);
-		gl.bindBuffer(GL.ARRAY_BUFFER, texcoordBuffer);
 		
 		gl.bindBuffer(GL.ARRAY_BUFFER, positionBuffer);
+		var positionLocation = gl.getAttribLocation(shaderProgram, "geometry");
+		
+		
 		gl.enableVertexAttribArray(positionLocation);
 		gl.vertexAttribPointer(positionLocation, 3, GL.FLOAT, false, 0, 0);
-		gl.bindBuffer(GL.ARRAY_BUFFER, texcoordBuffer);
-		gl.enableVertexAttribArray(texcoordLocation);
-		gl.vertexAttribPointer(texcoordLocation, 2, GL.FLOAT, false, 0, 0);
+		//gl.bindBuffer(GL.ARRAY_BUFFER, texcoordBuffer);
+		//gl.enableVertexAttribArray(texcoordLocation);
+		//gl.vertexAttribPointer(texcoordLocation, 2, GL.FLOAT, false, 0, 0);
 		
-		ppxTexture.setToContext(gl);
+		//ppxTexture.setToContext(gl);
 		
-		gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
-		gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);
-		gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST);
+		//gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
+		//gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);
+		//gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST);
 		
 		gl.drawElements(GL.TRIANGLES, 6, GL.UNSIGNED_SHORT, 0);
-		
-		if(Math.random() > 0.8)
-			untyped __js__('webglInfo({0});', gl);
 	}
 	
 }

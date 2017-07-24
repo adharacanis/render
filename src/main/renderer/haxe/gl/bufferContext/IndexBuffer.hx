@@ -23,7 +23,7 @@ class IndexBuffer implements IBuffer
 	
 	public inline function uploadFromArray(value:Array<UInt>, offset:UInt = 0, length:UInt = 0)
 	{
-		context.uploadBufferFromArray(this, value, offset, length);
+		context.uploadBufferFromArray16(this, value, offset, length);
 	}
 	
 	public function uploadFromBytes(value:Bytes)

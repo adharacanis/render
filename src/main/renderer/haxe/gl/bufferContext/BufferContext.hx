@@ -57,6 +57,24 @@ class BufferContext implements IBufferContext
 			context.uploadBufferSubData(type, value, offset);
 	}
 	
+	public inline function uploadBufferFromArray16(buffer:IBuffer, value:Array<UInt>, offset:UInt = 0, length:UInt = 0)
+	{
+		var type:BufferType = buffer.type;
+		var usage:BufferUsage = buffer.usage;
+		
+		useBuffer(type, buffer.internalBuffer);
+		
+		var size:UInt;
+		
+		trace(value, Type.typeof(value[0]));
+		
+		if (length == 0)
+			size = value.length;
+			
+		if(offset == 0)
+			context.uploadBufferData16(type, value, usage);
+	}
+	
 	private inline function useBuffer(type:BufferType, buffer:InternalBuffer)
 	{
 		if (currentInternalBuffer == buffer)

@@ -46,8 +46,6 @@ class BufferContext implements IBufferContext
 		
 		var size:UInt;
 		
-		trace(value, Type.typeof(value[0]));
-		
 		if (length == 0)
 			size = value.length;
 			

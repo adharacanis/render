@@ -1,5 +1,5 @@
-attribute vec3 geometry;
+attribute vec4 geometry;
 
 void main(void) {
-	gl_Position = vec4(geometry, 1.0);
+	gl_Position = geometry;
 }

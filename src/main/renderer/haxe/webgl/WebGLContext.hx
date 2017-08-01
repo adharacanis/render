@@ -1,6 +1,7 @@
 package webgl; #if html5
 
 import gl.IGLContext;
+import gl.bufferContext.AttributeType;
 import gl.bufferContext.BufferType;
 import gl.bufferContext.BufferUsage;
 import gl.bufferContext.InternalBuffer;
@@ -28,7 +29,7 @@ class WebGLContext implements IGLContext
 	public function request()
 	{
 		canvas = cast Browser.document.getElementById("gameview");  
-		gl = canvas.getContextWebGL({
+		var renderingContext = canvas.getContextWebGL({
 			alpha: false,
 			antialias: false,
 			depth: false,
@@ -36,6 +37,12 @@ class WebGLContext implements IGLContext
 			preserveDrawingBuffer: false,
 			stencil: false
 		});
+		
+		#if debug
+		gl = untyped __js__("WebGLDebugUtils.makeDebugContext({0})", renderingContext);
+		#else
+		gl = renderingContext;
+		#end
 	}
 	
 	public inline function createBuffer():InternalBuffer
@@ -67,6 +74,16 @@ class WebGLContext implements IGLContext
 	public inline function uploadBufferSubData(type:BufferType, value:Array<Float>, offset:UInt):Void 
 	{
 		gl.bufferSubData(type, offset, value);
+	}
+	
+	public inline function enableVertexAttribArray(locationToBind:Int)
+	{
+		gl.enableVertexAttribArray(locationToBind);
+	}
+	
+	public inline function vertexAttribPointer(locationToBind:Int, size:Int, attributeType:AttributeType, normalized:Bool = false, stride:Int = 0, offset:Int = 0)
+	{
+		gl.vertexAttribPointer(locationToBind, size, attributeType, normalized, stride, offset);
 	}
 }
 #end

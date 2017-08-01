@@ -10,4 +10,6 @@
 -D native-trace
 -D source-map-content
 
+--no-inline
+
 --macro addMetadata('@:expose', 'haxe.CallStack')

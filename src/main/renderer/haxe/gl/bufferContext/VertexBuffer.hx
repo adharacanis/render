@@ -26,6 +26,11 @@ class VertexBuffer implements IBuffer
 		context.uploadBufferFromArray(this, value, offset, length);
 	}
 	
+	public inline function mapAttributes(locationToBind:Int, size:Int, attributeType:AttributeType, normalized:Bool = false, stride:Int = 0, offset:Int = 0)
+	{
+		context.mapAttributes(this, locationToBind, size, attributeType, normalized, stride, offset);
+	}
+	
 	public function uploadFromBytes(value:Bytes)
 	{
 		

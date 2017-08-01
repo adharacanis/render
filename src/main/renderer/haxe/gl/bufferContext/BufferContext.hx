@@ -64,8 +64,6 @@ class BufferContext implements IBufferContext
 		
 		var size:UInt;
 		
-		trace(value, Type.typeof(value[0]));
-		
 		if (length == 0)
 			size = value.length;
 			
@@ -73,11 +71,20 @@ class BufferContext implements IBufferContext
 			context.uploadBufferData16(type, value, usage);
 	}
 	
+	public inline function mapAttributes(buffer:IBuffer, locationToBind:Int, size:Int, attributeType:AttributeType, normalized:Bool = false, stride:Int = 0, offset:Int = 0)
+	{
+		useBuffer(buffer.type, buffer.internalBuffer);
+		context.enableVertexAttribArray(locationToBind);
+		context.vertexAttribPointer(locationToBind, size, attributeType, normalized, stride, offset);
+	}
+	
 	private inline function useBuffer(type:BufferType, buffer:InternalBuffer)
 	{
 		if (currentInternalBuffer == buffer)
 			return;
 			
+		currentInternalBuffer = buffer;
+		
 		context.useBuffer(type, buffer);
 	}
 }

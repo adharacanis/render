@@ -4,24 +4,23 @@
     <meta charset="UTF-8">
     <title></title>
     <script type="text/javascript" src="lib/source-map.min.js"></script>
-    <script type="text/javascript" src="lib/webfont.js"></script>
+    <script type="text/javascript" src="lib/webgl-debug.js"></script>
+    <script type="text/javascript" src="lib/stats.min.js"></script>
   
-	<canvas id="testView" width=1 height=1></canvas>
-	<canvas id="gameview" width=1366 height=768></canvas>
-
+	<canvas id="gameview" width=768 height=768></canvas>
 		
 	<script type="text/javascript">
         var sourceMapPath = 'program.js.map';
-
+		/*
         function resize(width, height) {
-            if(width == undefined) width = 1366;
+            if(width == undefined) width = 768;
             if(height == undefined) height = 768;
             var gameView = document.getElementById('gameview');
             gameView.width = width;
             gameView.height = height;
             gameView.dispatchEvent(new CustomEvent('resize'));
         }
-
+		*/
 
         function attachSourceMap(rawSourceMap) 
 		{
@@ -40,8 +39,13 @@
     </script>
 	
 </head>
+	
 <body>
 	<script type="text/javascript" src="./program.js"></script>
+</body>
+<!-- 
+<body>
+	<canvas id="testView" width=1 height=1></canvas>
     <p id="report">Test</p>
 		<script type="text/JavaScript">
 		function webglInfo(gl)
@@ -80,4 +84,5 @@
 		}
         </script>
 </body>
+ -->
 </html>

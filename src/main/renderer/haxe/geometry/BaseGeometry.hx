@@ -1,5 +1,6 @@
 package geometry;
 
+import gl.bufferContext.AttributeType;
 import gl.bufferContext.BufferContext;
 import gl.bufferContext.IndexBuffer;
 import gl.bufferContext.VertexBuffer;
@@ -191,6 +192,9 @@ class BaseGeometry
 	 */
 	private function setBuffers(geometryContext:BufferContext) 
 	{
+		vertexBuffer.mapAttributes(0, 2, AttributeType.FLOAT, false, 16, 0);
+		vertexBuffer.mapAttributes(1, 2, AttributeType.FLOAT, false, 16, 8);
+		
 		//geometryContext.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
 		//geometryContext.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
 	}

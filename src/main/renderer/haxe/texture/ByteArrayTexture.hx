@@ -31,7 +31,7 @@ class ByteArrayTexture extends TextureBase
 		var view = arr.view;
 		
 		gl.texImage2D(GL.TEXTURE_2D, 0, textureFormat, width, height, 0, textureFormat, dataFormat, cast view);
-		gl.bindTexture(GL.TEXTURE_2D, null);
+		//gl.bindTexture(GL.TEXTURE_2D, null);
 	}
 	
 	public function setToContext(gl:GL) 

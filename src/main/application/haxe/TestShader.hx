@@ -15,6 +15,17 @@ class TestShader
 		
 	}
 	
+	static function createParallelProj(left:Float, right:Float, bottom:Float, top:Float) {
+		var projection:Array<Float> = new Array<Float>();
+		var tb:Float = top - bottom;
+		var rl:Float = right - left;
+		projection[0] = 2 / rl;
+		projection[1] = 2 / tb;
+		projection[2] = -(right + left) / rl;
+		projection[3] = -(top + bottom) / tb;
+		return projection;
+	}
+	
 	public function create(gl:RenderingContext)
 	{
 		var vertShader = gl.createShader(RenderingContext.VERTEX_SHADER);
@@ -28,9 +39,25 @@ class TestShader
 		gl.compileShader(fragShader);
 		
 		shaderProgram = gl.createProgram();
+		
 		gl.attachShader(shaderProgram, vertShader); 
+		var infoLog = gl.getShaderInfoLog(vertShader);
+		if (infoLog != null && infoLog.length != 0)
+			trace(infoLog);
+		
 		gl.attachShader(shaderProgram, fragShader);
+		var infoLog = gl.getShaderInfoLog(fragShader);
+		if (infoLog != null && infoLog.length != 0)
+			trace(infoLog);
+			
 		gl.linkProgram(shaderProgram);
+		
+		gl.validateProgram(shaderProgram);
+		
+		if(!gl.getProgramParameter(shaderProgram, RenderingContext.LINK_STATUS)) {
+			var infoLog = gl.getProgramInfoLog(shaderProgram);
+			trace(infoLog);
+		}
 	}
 	
 	@:access(gl.bufferContext)
@@ -52,6 +79,7 @@ class TestShader
 		
 		
 		gl.useProgram(shaderProgram);
+		gl.uniform4fv(gl.getUniformLocation(shaderProgram, "viewProjection"), createParallelProj(0, 768, 768, 0));
 	}
 	
 }

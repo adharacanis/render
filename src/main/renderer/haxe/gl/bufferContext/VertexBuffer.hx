@@ -10,7 +10,7 @@ class VertexBuffer implements IBuffer
 	
 	@:allow(gl) private var internalBuffer:InternalBuffer;
 	@:allow(gl) private var type:BufferType = BufferType.VERTEX_BUFFER;
-	@:allow(gl) private var usage:BufferUsage = BufferUsage.STATIC;
+	@:allow(gl) private var usage:BufferUsage = BufferUsage.DYNAMIC;
 	
 	@:allow(BufferContext)
 	public function new(size:UInt, layoutSize:UInt, internalBuffer:InternalBuffer, context:BufferContext) 

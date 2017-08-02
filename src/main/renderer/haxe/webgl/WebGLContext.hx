@@ -62,7 +62,7 @@ class WebGLContext implements IGLContext
 	
 	public inline function uploadBufferData16(type:BufferType, data:Array<UInt>, usage:BufferUsage)
 	{
-		trace("upload uint 16", type, usage);
+		//trace("upload uint 16", type, usage);
 		gl.bufferData(type, new Uint16Array(data), usage);
 	}
 	

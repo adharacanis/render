@@ -192,8 +192,8 @@ class BaseGeometry
 	 */
 	private function setBuffers(geometryContext:BufferContext) 
 	{
-		vertexBuffer.mapAttributes(0, 2, AttributeType.FLOAT, false, 16, 0);
-		vertexBuffer.mapAttributes(1, 2, AttributeType.FLOAT, false, 16, 8);
+		vertexBuffer.mapAttributes(1, 2, AttributeType.FLOAT, false, 16, 0);
+		vertexBuffer.mapAttributes(0, 2, AttributeType.FLOAT, true, 16, 8);
 		
 		//geometryContext.setVertexBufferAt(0, vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_2);
 		//geometryContext.setVertexBufferAt(1, vertexBuffer, 2, Context3DVertexBufferFormat.FLOAT_2);
@@ -255,8 +255,14 @@ class BaseGeometry
 		vertexBuffer = geometryContext.createVertexBuffer(numVertices, 4);
 		indexBuffer = geometryContext.createIndexBuffer(indices.length, 1);
 		
-		uploadVertexBuffer(0, numVertices);
+		upload();
+		
 		uploadIndexBuffer(0, indices.length);
+	}
+	
+	public function upload()
+	{
+		uploadVertexBuffer(0, numVertices);
 	}
 	
 	/**

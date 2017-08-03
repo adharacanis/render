@@ -9,6 +9,9 @@ class FrameRunner extends Observer
 {
 	var updateEvent:Event = new Event(Event.UPDATE);
 	var stats:Stats;
+	
+	var window:js.html.Window;
+	var document:js.html.HTMLDocument;
 
 	public function new() 
 	{
@@ -16,7 +19,10 @@ class FrameRunner extends Observer
 		stats = new Stats();
 		stats.showPanel(0);
 		
-		Browser.document.body.appendChild(stats.dom);
+		window = Browser.window;
+		document = Browser.document;
+		
+		document.body.appendChild(stats.dom);
 	}
 	
 	public function start() 
@@ -26,12 +32,12 @@ class FrameRunner extends Observer
 	
 	inline function requestAnimationFrame() 
 	{
-		Browser.window.requestAnimationFrame(onEnterFrame);
+		window.requestAnimationFrame(onEnterFrame);
 	}
 	
-	function onEnterFrame(?_) 
+	inline function onEnterFrame(timestamp:Float) 
 	{
-		if (!Browser.document.hidden) 
+		if (!document.hidden) 
 		{
 			stats.begin();
 			dispatchEvent(updateEvent);

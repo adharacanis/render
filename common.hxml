@@ -7,5 +7,6 @@
 -resource frag.glsl@frag
 
 -main samples.SimplePPXTexture
+#-main Main
 
 -dce full

@@ -33,8 +33,6 @@ class Main
 	public static function main()
 	{
 		new Main();
-		
-		var assetStorage:AssetsStorage;
 	}
 	
 	public function new() 
@@ -55,6 +53,7 @@ class Main
 		frameRunner.addEventListener(Event.UPDATE, onEnterFrame);
 		
 		driver = new Driver();
+		driver.requestContext();
 		
 		vertBuffer = driver.createVertexBuffer(1024, 4);
 		vertBuffer.uploadFromArray([1, 2, 3, 4, 5, 6], 0, 0);

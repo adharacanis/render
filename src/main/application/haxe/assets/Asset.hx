@@ -2,11 +2,15 @@ package assets;
 
 class Asset<T>
 {
-	var content(get, null):T;
+	public var extension(get, null):String;
+	public var name(get, null):String;
+	public var content(get, null):T;
 	
-	public function new() 
+	public function new(name:String, extension:String, content:T) 
 	{
-		
+		this.content = content;
+		this.extension = extension;
+		this.name = name;
 	}
 	
 	function get_content():T 
@@ -14,8 +18,13 @@ class Asset<T>
 		return content;
 	}
 	
-	public function setData(data:T)
+	function get_extension():String 
 	{
-		this.content = data;
+		return extension;
+	}
+	
+	function get_name():String 
+	{
+		return name;
 	}
 }

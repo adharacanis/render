@@ -1,4 +1,5 @@
 package assets;
+import assets.AssetsStorage;
 import events.DataEvent;
 import events.Event;
 import events.Observer;
@@ -15,15 +16,16 @@ class AssetLoader extends Observer
 	var currentLoading:String;
 	
 	var dataLoader:DataLoader = new DataLoader();
-	var assetsStorage:AssetsStorage = new AssetsStorage();
+	var assetsStorage:AssetsStorage;
 	
 	var filesLoaded:Int;
 	var filesTotal:Int;
 	var isLoadInProgress:Bool;
 	
-	public function new() 
+	public function new(assetsStorage:AssetsStorage) 
 	{
 		super();
+		this.assetsStorage = assetsStorage;
 		initalize();
 	}
 	
@@ -74,10 +76,11 @@ class AssetLoader extends Observer
 		
 		var slashIndex:Int = currentLoading.indexOf("/") + 1;
 		var fileName:String = currentLoading.substring(slashIndex, currentLoading.length - 4);
+		var extension:String = currentLoading.substr(currentLoading.length - 3, 3);
 		
 		var data:Bytes = e.data;
 		
-		assetsStorage.addData(fileName, data);
+		assetsStorage.addAsset(fileName, extension, data);
 		
 		if (loadQue.length == 0)
 		{

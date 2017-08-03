@@ -11,10 +11,14 @@ class AssetsStorage
 		
 	}
 	
-	public function addData(fileName:String, data:Bytes) 
+	public function getAsset(fileName:String):BinaryAsset
 	{
-		var asset:BinaryAsset = new BinaryAsset();
-		asset.setData(data);
+		return binaryAssets.get(fileName);
+	}
+	
+	public function addAsset(fileName:String, extension:String, data:Bytes) 
+	{
+		var asset:BinaryAsset = new BinaryAsset(fileName, extension, data);
 		binaryAssets.set(fileName, asset);
 	}
 }

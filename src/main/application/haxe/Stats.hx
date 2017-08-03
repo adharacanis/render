@@ -1,4 +1,5 @@
 package;
+
 import js.Browser;
 import js.html.HtmlElement;
 

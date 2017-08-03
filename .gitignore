@@ -4,3 +4,4 @@
 .gradle
 program.js
 program.js.map
+*.hxproj

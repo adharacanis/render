@@ -6,6 +6,6 @@
 -resource vert.glsl@vert
 -resource frag.glsl@frag
 
--main Main
+-main samples.SimplePPXTexture
 
 -dce full

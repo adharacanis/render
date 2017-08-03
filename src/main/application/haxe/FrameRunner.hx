@@ -1,6 +1,8 @@
 package;
+
 import events.Event;
 import events.Observer;
+
 import js.Browser;
 
 class FrameRunner extends Observer

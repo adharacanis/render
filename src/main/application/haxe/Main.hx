@@ -1,5 +1,6 @@
 package;
 
+import assets.AssetsStorage;
 import events.DataEvent;
 import events.Event;
 import external.DataLoader;
@@ -32,6 +33,8 @@ class Main
 	public static function main()
 	{
 		new Main();
+		
+		var assetStorage:AssetsStorage;
 	}
 	
 	public function new() 

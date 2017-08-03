@@ -1,21 +1,31 @@
 package gl;
 
+import assets.BinaryAsset;
+import events.Event;
+import events.Observer;
 import gl.bufferContext.BufferContext;
 import gl.bufferContext.IBuffer;
 import gl.bufferContext.IBufferContext;
 import gl.bufferContext.VertexBuffer;
 
-class Driver implements IBufferContext
+class Driver extends Observer implements IBufferContext
 {
 	var context:Context;
 	public var bufferContext:BufferContext;
 	
 	public function new() 
 	{
+		super();
+		
 		context = new Context();
-		context.request();
 		
 		bufferContext = new BufferContext(context);
+	}
+	
+	public function requestContext()
+	{
+		context.request();
+		dispatchEvent(new Event(Event.COMPLETE));
 	}
 	
 	public function update():Void

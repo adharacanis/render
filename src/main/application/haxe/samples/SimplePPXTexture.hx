@@ -4,6 +4,7 @@ import events.Event;
 import external.data.PPXData;
 import texture.PPXTexture;
 import texture.TextureBase;
+import webgl.WebGLContext;
 
 class SimplePPXTexture extends SampleBase 
 {
@@ -15,6 +16,8 @@ class SimplePPXTexture extends SampleBase
 	public function new() 
 	{
 		super();
+		
+		return;
 	}
 	
 	override function buildAssetsList() 
@@ -28,11 +31,11 @@ class SimplePPXTexture extends SampleBase
 	{
 		super.buildScene();
 		
-		//var asset:BinaryAsset = assetsStorage.getAsset("leaf");
-		//var data:PPXData = new PPXData(asset.content);
-		//var texture:TextureBase = new PPXTexture(data);
+		var asset:BinaryAsset = assetsStorage.getAsset("leaf");
+		var data:PPXData = new PPXData(asset.content);
+		var texture:TextureBase = new PPXTexture(data);
 		
-		//texture.uploadToGL(texture);
+		texture.uploadToGL(WebGLContext.gl);
 	}
 	
 	override public function onUpdate(e:Event):Void 

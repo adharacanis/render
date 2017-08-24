@@ -9,21 +9,24 @@ import js.Browser;
 import js.html.CanvasElement;
 import js.html.Float32Array;
 import js.html.Uint16Array;
+import js.html.webgl.ExtensionInstancedArrays;
 import js.html.webgl.RenderingContext;
 
 class WebGLContext implements IGLContext 
 {
 	static public var gl:RenderingContext;
+	static public var instancedExtension:ExtensionInstancedArrays;
 	var canvas:CanvasElement;
 
 	public function new() 
 	{
-		
+			
 	}
 	
 	public function update():Void
 	{
 		gl.drawElements(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0);
+		//instancedExtension.drawElementsInstancedANGLE(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0, 12);
 	}
 	
 	public function request()
@@ -43,6 +46,8 @@ class WebGLContext implements IGLContext
 		#else
 		gl = renderingContext;
 		#end
+		
+		instancedExtension = gl.getExtension('ANGLE_instanced_arrays');
 	}
 	
 	public inline function createBuffer():InternalBuffer

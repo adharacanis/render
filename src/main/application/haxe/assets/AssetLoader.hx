@@ -95,6 +95,7 @@ class AssetLoader extends Observer
 	
 	function finishLoading() 
 	{
+		trace('finish loading');
 		dispatchEvent(new Event(Event.COMPLETE));
 	}
 	

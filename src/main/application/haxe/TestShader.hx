@@ -40,6 +40,11 @@ class TestShader
 		
 		shaderProgram = gl.createProgram();
 		
+		gl.bindAttribLocation(shaderProgram, 0, "a_geometry");
+		gl.bindAttribLocation(shaderProgram, 1, "a_uv");
+		gl.bindAttribLocation(shaderProgram, 2, "a_color");
+		gl.bindAttribLocation(shaderProgram, 3, "padding");
+		
 		gl.attachShader(shaderProgram, vertShader); 
 		var infoLog = gl.getShaderInfoLog(vertShader);
 		if (infoLog != null && infoLog.length != 0)
@@ -61,7 +66,7 @@ class TestShader
 	}
 	
 	@:access(gl.bufferContext)
-	public function link(gl:RenderingContext, buffer:VertexBuffer, indexBuffer:IBuffer)
+	public function link(gl:RenderingContext)
 	{
 		//gl.clearColor(0.5, 0.5, 0.5, 0.9);
 		//gl.viewport(0, 0, 800, 600);

@@ -16,13 +16,13 @@ class FrameRunner extends Observer
 	public function new() 
 	{
 		super();
-		stats = new Stats();
-		stats.showPanel(0);
+		//stats = new Stats();
+		//stats.showPanel(0);
 		
 		window = Browser.window;
 		document = Browser.document;
 		
-		document.body.appendChild(stats.dom);
+		//document.body.appendChild(stats.dom);
 	}
 	
 	public function start() 
@@ -39,9 +39,9 @@ class FrameRunner extends Observer
 	{
 		if (!document.hidden) 
 		{
-			stats.begin();
+			//stats.begin();
 			dispatchEvent(updateEvent);
-			stats.end();
+			//stats.end();
 			requestAnimationFrame();
 		}
 	}

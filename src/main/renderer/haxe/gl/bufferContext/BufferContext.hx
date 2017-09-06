@@ -24,8 +24,8 @@ class BufferContext implements IBufferContext
 	
 	public inline function createVertexBuffer(size:UInt, registersPerVertex:UInt):VertexBuffer
 	{
-		var intenralBuffer:InternalBuffer = context.createBuffer();
-		var vertexBuffer:VertexBuffer = new VertexBuffer(size, registersPerVertex, intenralBuffer, this);
+		var doubleBuffer:DoubleBuffer = new DoubleBuffer(context.createBuffer(), context.createBuffer());
+		var vertexBuffer:VertexBuffer = new VertexBuffer(size, registersPerVertex, doubleBuffer, this);
 		
 		return vertexBuffer;
 	}
@@ -34,6 +34,24 @@ class BufferContext implements IBufferContext
 	{
 		var internalBuffer:InternalBuffer = buffer.internalBuffer;
 		context.disposeBuffer(internalBuffer);
+	}
+	
+	public inline function uploadBufferFromArray2(buffer:IBuffer, value:Array<Float>, offset:UInt = 0, length:UInt = 0)
+	{
+		var type:BufferType = buffer.type;
+		var usage:BufferUsage = buffer.usage;
+		
+		useBuffer(type, buffer.internalBuffer);
+		
+		var size:UInt;
+		
+		if (length == 0)
+			size = value.length;
+			
+		if(offset == 0)
+			context.uploadBufferSubData(type, value, offset);
+		else
+			context.uploadBufferSubData(type, value, offset);
 	}
 	
 	@:overload( function( buffer:IBuffer, value:Array<UInt>, offset:UInt = 0, length:UInt = 0 ) : Void {} )
@@ -78,7 +96,7 @@ class BufferContext implements IBufferContext
 		context.vertexAttribPointer(locationToBind, size, attributeType, normalized, stride, offset);
 	}
 	
-	private inline function useBuffer(type:BufferType, buffer:InternalBuffer)
+	public inline function useBuffer(type:BufferType, buffer:InternalBuffer)
 	{
 		if (currentInternalBuffer == buffer)
 			return;

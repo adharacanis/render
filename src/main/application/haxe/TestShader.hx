@@ -44,6 +44,7 @@ class TestShader
 		gl.bindAttribLocation(shaderProgram, 1, "a_uv");
 		gl.bindAttribLocation(shaderProgram, 2, "a_color");
 		gl.bindAttribLocation(shaderProgram, 3, "padding");
+		gl.bindAttribLocation(shaderProgram, 4, "id");
 		
 		gl.attachShader(shaderProgram, vertShader); 
 		var infoLog = gl.getShaderInfoLog(vertShader);

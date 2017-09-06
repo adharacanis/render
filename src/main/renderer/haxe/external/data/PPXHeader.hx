@@ -29,11 +29,11 @@ class PPXHeader
 		header.width = width;
 		header.height = height;
 		
-		trace("ppx data header");
-		trace('width = $width');
-		trace('height = $height');
-		trace('sig = $sig, $nullByte');
-		trace('size = ${bytes.length}');
+		//trace("ppx data header");
+		//trace('width = $width');
+		//trace('height = $height');
+		//trace('sig = $sig, $nullByte');
+		//trace('size = ${bytes.length}');
 		
 		return header;
 	}

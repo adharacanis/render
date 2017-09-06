@@ -8,17 +8,24 @@ class VertexBuffer implements IBuffer
 	var layoutSize:UInt;
 	var context:BufferContext;
 	
+	@:allow(gl) private var doubleBuffer:DoubleBuffer;
 	@:allow(gl) private var internalBuffer:InternalBuffer;
 	@:allow(gl) private var type:BufferType = BufferType.VERTEX_BUFFER;
-	@:allow(gl) private var usage:BufferUsage = BufferUsage.DYNAMIC;
+	@:allow(gl) private var usage:BufferUsage = BufferUsage.STREAM;
 	
 	@:allow(BufferContext)
-	public function new(size:UInt, layoutSize:UInt, internalBuffer:InternalBuffer, context:BufferContext) 
+	public function new(size:UInt, layoutSize:UInt, doubleBuffer:DoubleBuffer, context:BufferContext) 
 	{
-		this.internalBuffer = internalBuffer;
+		this.doubleBuffer = doubleBuffer;
+		this.internalBuffer = doubleBuffer.getBuffer();
 		this.context = context;
 		this.layoutSize = layoutSize;
 		this.size = size;
+	}
+	
+	public inline function uploadFromArray2(value:Array<Float>, offset:UInt = 0, length:UInt = 0)
+	{
+		context.uploadBufferFromArray2(this, value, offset, length);
 	}
 	
 	public inline function uploadFromArray(value:Array<Float>, offset:UInt = 0, length:UInt = 0)

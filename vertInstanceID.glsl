@@ -8,10 +8,11 @@ uniform mediump vec4 viewProjection;
 uniform mediump vec2 animation;
 
 attribute mediump vec2 padding;
-attribute vec4 a_geometry;
+attribute vec4 a_geometry_xy_1;
+
 attribute vec2 a_uv;
 attribute vec4 a_color;
-attribute vec4 id;
+attribute float id;
 
 varying mediump vec2 uv;
 varying mediump vec4 color;

@@ -25,15 +25,20 @@ class WebGLContext implements IGLContext
 	
 	public function update():Void
 	{
-		gl.drawElements(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0);
-		//instancedExtension.drawElementsInstancedANGLE(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0, 12);
+		gl.clearColor(0, 0, 0, 1);
+		//gl.colorMask(false, false, false, true);
+		gl.clear(RenderingContext.COLOR_BUFFER_BIT);
+		
+		if(Main.instanced == false)
+			gl.drawElements(RenderingContext.TRIANGLES, 6 * Main.instancesCount, RenderingContext.UNSIGNED_SHORT, 0);
+		else
+			instancedExtension.drawElementsInstancedANGLE(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0, Main.instancesCount);
 	}
 	
 	public function request()
 	{
 		canvas = cast Browser.document.getElementById("gameview");  
-		var renderingContext = canvas.getContextWebGL({
-			alpha: false,
+		var renderingContext = canvas.getContextWebGL({alpha: false,
 			antialias: false,
 			depth: false,
 			premultipliedAlpha: false,
@@ -41,13 +46,14 @@ class WebGLContext implements IGLContext
 			stencil: false
 		});
 		
-		#if debug
-		gl = untyped __js__("WebGLDebugUtils.makeDebugContext({0})", renderingContext);
-		#else
+		//#if debug
+		//gl = untyped __js__("WebGLDebugUtils.makeDebugContext({0})", renderingContext);
+		//#else
 		gl = renderingContext;
-		#end
+		//#end
 		
 		instancedExtension = gl.getExtension('ANGLE_instanced_arrays');
+		trace("instanced extension " + instancedExtension);
 	}
 	
 	public inline function createBuffer():InternalBuffer
@@ -76,9 +82,9 @@ class WebGLContext implements IGLContext
 		gl.bufferData(type, new Float32Array(data), usage);
 	}
 	
-	public inline function uploadBufferSubData(type:BufferType, value:Array<Float>, offset:UInt):Void 
+	public inline function uploadBufferSubData(type:BufferType, data:Array<Float>, offset:UInt):Void 
 	{
-		gl.bufferSubData(type, offset, value);
+		gl.bufferSubData(type, offset, new Float32Array(data));
 	}
 	
 	public inline function enableVertexAttribArray(locationToBind:Int)

@@ -12,6 +12,6 @@ class PPXData
 	{
 		header = PPXHeader.fromBytes(data);
 		this.data = Bytes.alloc(data.length - PPXHeader.HEADER_SIZE);
-		this.data.blit(0, data, PPXHeader.HEADER_SIZE, data.length - PPXHeader.HEADER_SIZE);
+		this.data.blit(0, data, PPXHeader.HEADER_SIZE, data.length - PPXHeader.HEADER_SIZE);	
 	}
 }

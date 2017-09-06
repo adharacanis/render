@@ -17,7 +17,8 @@ class PPXTexture extends ByteArrayTexture
 	
 	override function get_data():Bytes 
 	{
-		return format.tools.Inflate.run(ppxData.data);
+		var data = format.tools.Inflate.run(ppxData.data);
+		return data;
 	}
 	
 	override function get_memorySize():Float 

@@ -36,17 +36,36 @@ class Main
 	var vertBuffer:gl.bufferContext.VertexBuffer;
 	var positionLocation:Int;
 	
-	public static var instanced:Bool = true;
-	public static var instancesCount:Int = 15000;
+	public static var instanced:Bool = false;
+	public static var instancesCount:Int = 1500;
+	var size:Float = 256 / 2 / 16;
 
 	public static function main()
 	{
 		new Main();
 	}
 	
-	public static function b(a:Vector<Float>)
+	//var urlVariableReg:String = "(\?|\&)([^=]+)\=([^&]+)";
+	static var urlVariableReg:String = "(\\?|\\&)({0})\\=([^&]+)";
+	static function getUrlVariableValie(variableName:String)
 	{
-		trace(a);
+		var reg:EReg = new EReg(StringTools.replace(urlVariableReg, "{0}", variableName), "g");
+		var location:String = Browser.document.location.href;
+		
+		if (!reg.match(location))
+			return null;
+		
+		return reg.matched(3);
+	}
+	
+	static function getUrlVariableAsBool(variableName:String)
+	{
+		var value = getUrlVariableValie(variableName);
+		
+		if (value == null || value == "false" || value == "0")
+			return false;
+		else
+			return true;
 	}
 	
 	public function new() 
@@ -68,6 +87,8 @@ class Main
 		
 		driver = new Driver();
 		driver.requestContext();
+		
+		instanced = getUrlVariableAsBool("instanced");
 		
 		if (Context.instancedExtension == null)
 			instanced = false;
@@ -123,7 +144,7 @@ class Main
 	function onEnterFrame() 
 	{
 		xx += 0.1;
-		Context.gl.uniform2f(uniformAnim, Math.sin(xx) * 76, Math.cos(xx) * 76);
+		//Context.gl.uniform2f(uniformAnim, Math.sin(xx) * 76, Math.cos(xx) * 76);
 		for (i in 0...1)
 		{
 			
@@ -161,7 +182,6 @@ class Main
 	var geometryData:Array<Float> = [];
 	private function buildGeometry()
 	{
-		var size:Float = 256 / 2 / 160;
 		var registerIndex:Int = 0;
 		
 		
@@ -282,29 +302,39 @@ class Main
 	var positionsData:Array<Float> = [];
 	private function buildPositions()
 	{
-		var halfW:Float = 768 / 2;
-		var halfH:Float = 768 / 2;
+		var halfW:Float = size;// 768 / 2;
+		var halfH:Float = size;// 768 / 2;
 		var registerIndex:Int = 0;
 		
 		if (instanced)
 		{
 			for (i in 0...instancesCount)
 			{
-				halfW = Math.random() * (768);
-				halfH = Math.random() * (768);
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
+				halfW += size * 2;
+				
+				if (halfW > 768)
+				{
+					halfW = size;
+					halfH += size * 2;
+				}
 			}
 		}
 		else
 		{
 			for (i in 0...instancesCount)
 			{
-				halfW = Math.random() * (768);
-				halfH = Math.random() * (768);
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
+				halfW += size * 2;
+				
+				if (halfW > 768)
+				{
+					halfW = size;
+					halfH += size * 2;
+				}
 			}
 		}
 		
@@ -331,10 +361,17 @@ class Main
 		{
 			for (i in 0...instancesCount)
 			{
-				colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0;
-				colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0;
-				colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 1.0;
-				colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 1.0;
+				var r:Float = Math.random();
+				var g:Float = Math.random();
+				var b:Float = Math.random();
+				colorsData[registerIndex++] = r; colorsData[registerIndex++] = g; colorsData[registerIndex++] = b; colorsData[registerIndex++] = 1.0;
+				colorsData[registerIndex++] = r; colorsData[registerIndex++] = g; colorsData[registerIndex++] = b; colorsData[registerIndex++] = 1.0;
+				colorsData[registerIndex++] = r; colorsData[registerIndex++] = g; colorsData[registerIndex++] = b; colorsData[registerIndex++] = 1.0;
+				colorsData[registerIndex++] = r; colorsData[registerIndex++] = g; colorsData[registerIndex++] = b; colorsData[registerIndex++] = 1.0;
+				//colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0;
+				//colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0;
+				//colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 1.0;
+				//colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 1.0;
 			}
 		}
 		

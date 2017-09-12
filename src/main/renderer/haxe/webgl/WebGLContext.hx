@@ -77,6 +77,11 @@ class WebGLContext implements IGLContext
 		gl.bufferData(type, new Uint16Array(data), usage);
 	}
 	
+	public inline function orphangeBuffer(type:BufferType, usage:BufferUsage)
+	{
+		gl.bufferData(type, 0, usage);
+	}
+	
 	public inline function uploadBufferData(type:BufferType, data:Array<Float>, usage:BufferUsage)
 	{
 		gl.bufferData(type, new Float32Array(data), usage);

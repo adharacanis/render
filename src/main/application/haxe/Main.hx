@@ -214,7 +214,7 @@ class Main
 		}
 		
 		var buffer = driver.createVertexBuffer(Std.int(geometryData.length / 2), 2);
-		buffer.uploadFromArray(geometryData, 0, 0);
+		buffer.uploadFromArray2(geometryData, 0, 0);
 		buffer.mapAttributes(0, 2, AttributeType.FLOAT, false, 8, 0);
 		
 		return buffer;
@@ -246,7 +246,7 @@ class Main
 		}
 		
 		var buffer = driver.createVertexBuffer(Std.int(uvsData.length / 2), 2);
-		buffer.uploadFromArray(uvsData);
+		buffer.uploadFromArray2(uvsData);
 		buffer.mapAttributes(1, 2, AttributeType.FLOAT, true, 8, 0);
 		
 		return buffer;
@@ -308,7 +308,7 @@ class Main
 		}
 		
 		var buffer = driver.createVertexBuffer(instanceIdData.length, 1);
-		buffer.uploadFromArray(instanceIdData);
+		buffer.uploadFromArray2(instanceIdData);
 		buffer.mapAttributes(4, 4, AttributeType.FLOAT, false, 16, 0);
 		
 		return buffer;
@@ -356,7 +356,7 @@ class Main
 		}
 		
 		var buffer = driver.createVertexBuffer(Std.int(positionsData.length / 2), 2);
-		buffer.uploadFromArray(positionsData);
+		buffer.uploadFromArray2(positionsData);
 		buffer.mapAttributes(3, 2, AttributeType.FLOAT, false, 8, 0);
 		
 		return buffer;
@@ -395,7 +395,7 @@ class Main
 		}
 		
 		var buffer = driver.createVertexBuffer(Std.int(colorsData.length / 2), 2);
-		buffer.uploadFromArray(colorsData);
+		buffer.uploadFromArray2(colorsData);
 		buffer.mapAttributes(2, 4, AttributeType.FLOAT, false, 16, 0);
 		
 		return buffer;

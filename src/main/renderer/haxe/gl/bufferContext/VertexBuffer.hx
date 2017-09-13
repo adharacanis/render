@@ -20,11 +20,18 @@ class VertexBuffer implements IBuffer
 		this.doubleBuffer = doubleBuffer;
 		this.internalBuffer = doubleBuffer.getBuffer();
 		
+		var size2 = 1000000 * 2 * 4;
+		var size1 = size * 2 * 4;
+		var currentSize = size2;
+		
+		context.useBuffer(type, doubleBuffer.buffer1);
+		context.context.allocateBuffer(type, currentSize, usage);
+		
 		context.useBuffer(type, doubleBuffer.buffer2);
-		context.context.allocateBuffer(type, size * 2 * 4, usage);
+		context.context.allocateBuffer(type, currentSize, usage);
 		
 		context.useBuffer(type, doubleBuffer.buffer3);
-		context.context.allocateBuffer(type, size * 2 * 4, usage);
+		context.context.allocateBuffer(type, currentSize, usage);
 		
 		this.context = context;
 		this.layoutSize = layoutSize;
@@ -37,6 +44,7 @@ class VertexBuffer implements IBuffer
 		internalBuffer = doubleBuffer.getBuffer();
 	}
 	
+	@:overload( function( value:js.html.Float32Array) : Void {} )
 	@:overload( function( value:js.html.Float32Array, offset:UInt = 0, length:UInt = 0) : Void {} )
 	public inline function uploadFromArray2(value:Array<Float>, offset:UInt = 0, length:UInt = 0)
 	{

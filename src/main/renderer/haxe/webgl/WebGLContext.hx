@@ -20,7 +20,7 @@ class WebGLContext implements IGLContext
 
 	public function new() 
 	{
-			
+		
 	}
 	
 	public function update():Void
@@ -77,19 +77,32 @@ class WebGLContext implements IGLContext
 		gl.bufferData(type, new Uint16Array(data), usage);
 	}
 	
+	public inline function allocateBuffer(type:BufferType, size:Int, usage:BufferUsage)
+	{
+		gl.bufferData(type, size, usage);
+	}
+	
 	public inline function orphangeBuffer(type:BufferType, usage:BufferUsage)
 	{
 		gl.bufferData(type, 0, usage);
 	}
 	
+	@:overload( function( type:BufferType, data:Float32Array, usage:BufferUsage ) : Void {} )
 	public inline function uploadBufferData(type:BufferType, data:Array<Float>, usage:BufferUsage)
-	{
-		gl.bufferData(type, new Float32Array(data), usage);
+	{	
+		if (Std.is(data, Float32Array))
+			gl.bufferData(type, data, usage);
+		else
+			gl.bufferData(type, new Float32Array(data), usage);
 	}
 	
+	@:overload( function( type:BufferType, data:Float32Array, offset:UInt ) : Void {} )
 	public inline function uploadBufferSubData(type:BufferType, data:Array<Float>, offset:UInt):Void 
 	{
-		gl.bufferSubData(type, offset, new Float32Array(data));
+		if (Std.is(data, Float32Array))
+			gl.bufferSubData(type, offset, data);
+		else
+			gl.bufferSubData(type, offset, new Float32Array(data));
 	}
 	
 	public inline function enableVertexAttribArray(locationToBind:Int)

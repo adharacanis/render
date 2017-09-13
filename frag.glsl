@@ -11,7 +11,7 @@ void main(void)
 	//gl_FragColor = vec4(1.0 * uv.x, 1.0 * uv.y, 0, 1.0);
 	vec4 sampleColor = texture2D(texture, uv);
 	
-	if(sampleColor.rgb == vec3(0.0, 0.0, 0.0))
+	//if(sampleColor.rgb == vec3(0.0, 0.0, 0.0))
 		discard; 
 		
 	gl_FragColor = sampleColor * color;

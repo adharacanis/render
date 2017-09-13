@@ -17,6 +17,7 @@ import haxe.ds.Vector;
 import haxe.io.Bytes;
 import js.Browser;
 import js.html.ArrayBuffer;
+import js.html.Float32Array;
 import js.html.Uint32Array;
 import js.html.Uint8Array;
 import js.html.XMLHttpRequestResponseType;
@@ -145,29 +146,37 @@ class Main
 	{
 		xx += 0.1;
 		//Context.gl.uniform2f(uniformAnim, Math.sin(xx) * 76, Math.cos(xx) * 76);
-		for (i in 0...1)
+		for (i in 0...100)
 		{
+			uvBuffer.swapBuffer();
+			uvBuffer.mapAttributes(1, 2, AttributeType.FLOAT, false, 8, 0);
+			uvBuffer.uploadFromArray2(uvsData, 0, 0);
 			
 			
-					//uvBuffer.uploadFromArray(uvsData);
-					//uvBuffer.mapAttributes(1, 2, AttributeType.FLOAT, false, 8, 0);
-					
-					//geometryBuffer.uploadFromArray(geometryData);
-					//geometryBuffer.mapAttributes(0, 2, AttributeType.FLOAT, false, 8, 0);
-					
-					//positionBuffer.uploadFromArray(positionsData);
-					//positionBuffer.mapAttributes(3, 2, AttributeType.FLOAT, false, 8, 0);
-					
-					//colorBuffer.uploadFromArray(colorsData);
-					//colorBuffer.mapAttributes(2, 4, AttributeType.FLOAT, true, 16, 0);
-				
-				driver.update();
+			geometryBuffer.swapBuffer();
+			geometryBuffer.mapAttributes(0, 2, AttributeType.FLOAT, false, 8, 0);
+			geometryBuffer.uploadFromArray2(geometryData, 0, 0);
 			
-			//uvBuffer.doubleBuffer.swapBuffer();
-			//geometryBuffer.doubleBuffer.swapBuffer();
-			//positionBuffer.doubleBuffer.swapBuffer();
-			//colorBuffer.doubleBuffer.swapBuffer();
+			
+			positionBuffer.swapBuffer();
+			positionBuffer.mapAttributes(3, 2, AttributeType.FLOAT, false, 8, 0);
+			positionBuffer.uploadFromArray2(positionsData, 0, 0);
+			
+			
+			colorBuffer.swapBuffer();
+			colorBuffer.mapAttributes(2, 4, AttributeType.FLOAT, true, 16, 0);
+			colorBuffer.uploadFromArray2(colorsData, 0, 0);
+			
+			
+			instanceId.swapBuffer();
+			instanceId.mapAttributes(2, 4, AttributeType.FLOAT, true, 16, 0);
+			instanceId.uploadFromArray2(instanceIdData, 0, 0);
+			
+			
+			//driver.update();
 		}
+		
+		driver.update();
 		
 		//Context.instancedExtension.vertexAttribDivisorANGLE(1, 0);
 		//Context.instancedExtension.vertexAttribDivisorANGLE(0, 0);
@@ -179,11 +188,12 @@ class Main
 	var colorBuffer:VertexBuffer;
 	var instanceId:VertexBuffer;
 	
-	var geometryData:Array<Float> = [];
+	var geometryData:Float32Array;
 	private function buildGeometry()
 	{
-		var registerIndex:Int = 0;
+		geometryData = new Float32Array(instanced? 4 * 2:4 * 2 * instancesCount);
 		
+		var registerIndex:Int = 0;
 		
 		if (instanced)
 		{
@@ -204,17 +214,20 @@ class Main
 		}
 		
 		var buffer = driver.createVertexBuffer(Std.int(geometryData.length / 2), 2);
-		buffer.uploadFromArray(geometryData);
+		buffer.uploadFromArray(geometryData, 0, 0);
 		buffer.mapAttributes(0, 2, AttributeType.FLOAT, false, 8, 0);
 		
 		return buffer;
 	}
 	
-	var uvsData:Array<Float> = [];
+	var uvsData:Float32Array;
 	private function buildUVs()
 	{
+		uvsData = new Float32Array(instanced? 4 * 2:4 * 2 * instancesCount);
+		
 		var registerIndex:Int = 0;
-		if (instanced && false)
+		
+		if (instanced)
 		{
 			uvsData[registerIndex++] = 0.0; uvsData[registerIndex++] = 1.0;
 			uvsData[registerIndex++] = 0.0; uvsData[registerIndex++] = 0.0;
@@ -239,9 +252,11 @@ class Main
 		return buffer;
 	}
 	
-	var instanceIdData:Array<Float> = [];
+	var instanceIdData:Float32Array;
 	private function buildInstanceId()
 	{
+		instanceIdData = new Float32Array(instanced? 4 * 4:4 * 4 * instancesCount);
+		
 		var registerIndex:Int = 0;
 		
 		if (instanced)
@@ -299,9 +314,11 @@ class Main
 		return buffer;
 	}
 	
-	var positionsData:Array<Float> = [];
+	var positionsData:Float32Array;
 	private function buildPositions()
 	{
+		positionsData = new Float32Array(instanced? 1 * 2 * instancesCount:4 * 2 * instancesCount);
+		
 		var halfW:Float = size;// 768 / 2;
 		var halfH:Float = size;// 768 / 2;
 		var registerIndex:Int = 0;
@@ -345,9 +362,11 @@ class Main
 		return buffer;
 	}
 	
-	var colorsData:Array<Float> = [];
+	var colorsData:Float32Array;
 	private function buildColors()
 	{
+		colorsData = new Float32Array(instanced? 1 * 4 * instancesCount:4 * 4 * instancesCount);
+		
 		var registerIndex:Int = 0;
 		
 		if (instanced)

@@ -1,6 +1,7 @@
 package gl.bufferContext;
 
 import haxe.io.Bytes;
+import js.html.Float32Array;
 
 class VertexBuffer implements IBuffer
 {
@@ -18,16 +19,32 @@ class VertexBuffer implements IBuffer
 	{
 		this.doubleBuffer = doubleBuffer;
 		this.internalBuffer = doubleBuffer.getBuffer();
+		
+		context.useBuffer(type, doubleBuffer.buffer2);
+		context.context.allocateBuffer(type, size * 2 * 4, usage);
+		
+		context.useBuffer(type, doubleBuffer.buffer3);
+		context.context.allocateBuffer(type, size * 2 * 4, usage);
+		
 		this.context = context;
 		this.layoutSize = layoutSize;
 		this.size = size;
 	}
 	
+	public function swapBuffer()
+	{
+		doubleBuffer.swapBuffer();
+		internalBuffer = doubleBuffer.getBuffer();
+	}
+	
+	@:overload( function( value:js.html.Float32Array, offset:UInt = 0, length:UInt = 0) : Void {} )
 	public inline function uploadFromArray2(value:Array<Float>, offset:UInt = 0, length:UInt = 0)
 	{
 		context.uploadBufferFromArray2(this, value, offset, length);
 	}
 	
+	@:overload( function( value:Float32Array) : Void {} )
+	@:overload( function( value:Float32Array, offset:UInt, length:UInt) : Void {} )
 	public inline function uploadFromArray(value:Array<Float>, offset:UInt = 0, length:UInt = 0)
 	{
 		context.uploadBufferFromArray(this, value, offset, length);
@@ -36,6 +53,7 @@ class VertexBuffer implements IBuffer
 	public inline function mapAttributes(locationToBind:Int, size:Int, attributeType:AttributeType, normalized:Bool = false, stride:Int = 0, offset:Int = 0)
 	{
 		context.mapAttributes(this, locationToBind, size, attributeType, normalized, stride, offset);
+		//context.mapDoubleAttributes(this, doubleBuffer.buffer1, doubleBuffer.buffer2, locationToBind, size, attributeType, normalized, stride, offset);
 	}
 	
 	public function uploadFromBytes(value:Bytes)

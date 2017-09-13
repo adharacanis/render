@@ -24,7 +24,7 @@ class BufferContext implements IBufferContext
 	
 	public inline function createVertexBuffer(size:UInt, registersPerVertex:UInt):VertexBuffer
 	{
-		var doubleBuffer:DoubleBuffer = new DoubleBuffer(context.createBuffer(), context.createBuffer());
+		var doubleBuffer:DoubleBuffer = new DoubleBuffer(context.createBuffer(), context.createBuffer(), context.createBuffer());
 		var vertexBuffer:VertexBuffer = new VertexBuffer(size, registersPerVertex, doubleBuffer, this);
 		
 		return vertexBuffer;
@@ -43,18 +43,18 @@ class BufferContext implements IBufferContext
 		
 		useBuffer(type, buffer.internalBuffer);
 		
-		var size:UInt;
+		var size:UInt = length;
 		
-		if (length == 0)
+		if (size == 0)
 			size = value.length;
 			
-		if(offset == 0)
-			context.uploadBufferSubData(type, value, offset);
-		else
-			context.uploadBufferSubData(type, value, offset);
+		//context.orphangeBuffer(type, usage);	
+		//context.allocateBuffer(type, size * 4, usage);	
+		context.uploadBufferSubData(type, value, offset);
 	}
 	
 	@:overload( function( buffer:IBuffer, value:Array<UInt>, offset:UInt = 0, length:UInt = 0 ) : Void {} )
+	@:overload( function( buffer:IBuffer, value:js.html.Float32Array, offset:UInt = 0, length:UInt = 0 ) : Void {} )
 	public inline function uploadBufferFromArray(buffer:IBuffer, value:Array<Float>, offset:UInt = 0, length:UInt = 0)
 	{
 		var type:BufferType = buffer.type;
@@ -62,9 +62,9 @@ class BufferContext implements IBufferContext
 		
 		useBuffer(type, buffer.internalBuffer);
 		
-		var size:UInt;
+		var size:UInt = length;
 		
-		if (length == 0)
+		if (size == 0)
 			size = value.length;
 			
 		if(offset == 0)
@@ -87,6 +87,19 @@ class BufferContext implements IBufferContext
 			
 		if(offset == 0)
 			context.uploadBufferData16(type, value, usage);
+	}
+	
+	public inline function mapDoubleAttributes(buffer:IBuffer, buffer1:InternalBuffer, buffer2:InternalBuffer, locationToBind:Int, size:Int, attributeType:AttributeType, normalized:Bool = false, stride:Int = 0, offset:Int = 0)
+	{
+		var type = buffer.type;
+		
+		useBuffer(type, buffer1);
+		context.enableVertexAttribArray(locationToBind);
+		context.vertexAttribPointer(locationToBind, size, attributeType, normalized, stride, offset);
+		
+		useBuffer(type, buffer2);
+		context.enableVertexAttribArray(locationToBind);
+		context.vertexAttribPointer(locationToBind, size, attributeType, normalized, stride, offset);
 	}
 	
 	public inline function mapAttributes(buffer:IBuffer, locationToBind:Int, size:Int, attributeType:AttributeType, normalized:Bool = false, stride:Int = 0, offset:Int = 0)

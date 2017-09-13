@@ -14,5 +14,5 @@ interface IGLContext
 	function uploadBufferData(type:BufferType, data:Array<Float>, usage:BufferUsage):Void;
 	function uploadBufferSubData(type:BufferType, value:Array<Float>, offset:UInt):Void;
 	
-	function update():Void;
+	function update(offset:Int, count:Int):Void;
 }

@@ -23,16 +23,19 @@ class WebGLContext implements IGLContext
 			
 	}
 	
-	public function update():Void
+	public function update(offset:Int, count:Int):Void
 	{
 		gl.clearColor(0, 0, 0, 1);
 		//gl.colorMask(false, false, false, true);
 		gl.clear(RenderingContext.COLOR_BUFFER_BIT);
 		
 		if(Main.instanced == false)
-			gl.drawElements(RenderingContext.TRIANGLES, 6 * Main.instancesCount, RenderingContext.UNSIGNED_SHORT, 0);
+			gl.drawElements(RenderingContext.TRIANGLES, 6 * count, RenderingContext.UNSIGNED_SHORT, 0);
 		else
-			instancedExtension.drawElementsInstancedANGLE(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0, Main.instancesCount);
+			instancedExtension.drawElementsInstancedANGLE(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0, count);
+			
+			//Main.instancesCount += 10;
+		//trace(Main.instancesCount);
 	}
 	
 	public function request()

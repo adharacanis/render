@@ -37,8 +37,9 @@ class Main
 	var positionLocation:Int;
 	
 	public static var instanced:Bool = false;
-	public static var instancesCount:Int = 1500;
-	var size:Float = 256 / 2 / 16;
+	public static var instancesCount:Int = 1625000;
+	var size:Float = 256 / 2 / 45;
+	var drawsCount:Int = 1;
 
 	public static function main()
 	{
@@ -143,9 +144,13 @@ class Main
 	var xx:Float = 0;
 	function onEnterFrame() 
 	{
+		var offset:Int = 0;
+		var count:Int = 16250;
+		
 		xx += 0.1;
-		//Context.gl.uniform2f(uniformAnim, Math.sin(xx) * 76, Math.cos(xx) * 76);
-		for (i in 0...1)
+		Context.gl.uniform2f(uniformAnim, Math.sin(xx) * 7.6, Math.cos(xx) * 7.6);
+		
+		while(offset + count < instancesCount)
 		{
 			
 			
@@ -161,7 +166,8 @@ class Main
 					//colorBuffer.uploadFromArray(colorsData);
 					//colorBuffer.mapAttributes(2, 4, AttributeType.FLOAT, true, 16, 0);
 				
-				driver.update();
+				driver.update(offset, count);
+				offset += count;
 			
 			//uvBuffer.doubleBuffer.swapBuffer();
 			//geometryBuffer.doubleBuffer.swapBuffer();
@@ -180,8 +186,10 @@ class Main
 	var instanceId:VertexBuffer;
 	
 	var geometryData:Array<Float> = [];
+	
 	private function buildGeometry()
 	{
+		
 		var registerIndex:Int = 0;
 		
 		
@@ -214,7 +222,7 @@ class Main
 	private function buildUVs()
 	{
 		var registerIndex:Int = 0;
-		if (instanced && false)
+		if (instanced)
 		{
 			uvsData[registerIndex++] = 0.0; uvsData[registerIndex++] = 1.0;
 			uvsData[registerIndex++] = 0.0; uvsData[registerIndex++] = 0.0;
@@ -302,8 +310,8 @@ class Main
 	var positionsData:Array<Float> = [];
 	private function buildPositions()
 	{
-		var halfW:Float = size;// 768 / 2;
-		var halfH:Float = size;// 768 / 2;
+		var halfW:Float = size;
+		var halfH:Float = size;
 		var registerIndex:Int = 0;
 		
 		if (instanced)
@@ -311,6 +319,7 @@ class Main
 			for (i in 0...instancesCount)
 			{
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
+				
 				halfW += size * 2;
 				
 				if (halfW > 768)
@@ -328,6 +337,7 @@ class Main
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
+				
 				halfW += size * 2;
 				
 				if (halfW > 768)
@@ -364,11 +374,11 @@ class Main
 				var r:Float = Math.random();
 				var g:Float = Math.random();
 				var b:Float = Math.random();
+				
 				colorsData[registerIndex++] = r; colorsData[registerIndex++] = g; colorsData[registerIndex++] = b; colorsData[registerIndex++] = 1.0;
 				colorsData[registerIndex++] = r; colorsData[registerIndex++] = g; colorsData[registerIndex++] = b; colorsData[registerIndex++] = 1.0;
 				colorsData[registerIndex++] = r; colorsData[registerIndex++] = g; colorsData[registerIndex++] = b; colorsData[registerIndex++] = 1.0;
 				colorsData[registerIndex++] = r; colorsData[registerIndex++] = g; colorsData[registerIndex++] = b; colorsData[registerIndex++] = 1.0;
-				//colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0;
 				//colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0;
 				//colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 1.0;
 				//colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 0.0; colorsData[registerIndex++] = 1.0; colorsData[registerIndex++] = 1.0;

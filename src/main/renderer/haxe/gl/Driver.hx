@@ -28,9 +28,9 @@ class Driver extends Observer implements IBufferContext
 		dispatchEvent(new Event(Event.COMPLETE));
 	}
 	
-	public function update():Void
+	public function update(offset:Int, count:Int):Void
 	{
-		context.update();
+		context.update(offset, count);
 	}
 	
 	public function disposeBuffer(buffer:IBuffer):Void 

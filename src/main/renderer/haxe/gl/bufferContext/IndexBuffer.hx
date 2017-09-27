@@ -1,38 +1,33 @@
 package gl.bufferContext;
 
+import gl.bufferContext.VertexData;
+import gl.bufferContext.buffer.BufferData;
 import haxe.io.Bytes;
 
 class IndexBuffer implements IBuffer
 {
-	var size:UInt;
-	var layoutSize:UInt;
+	var size:Int;
 	var context:BufferContext;
 	
 	@:allow(gl) private var internalBuffer:InternalBuffer;
 	@:allow(gl) private var type:BufferType = BufferType.INDEX_BUFFER;
 	@:allow(gl) private var usage:BufferUsage = BufferUsage.STATIC;
 	
-	@:allow(BufferContext)
-	public function new(size:UInt, layoutSize:UInt, internalBuffer:InternalBuffer, context:BufferContext) 
+	public function new(size:Int) 
 	{
-		this.internalBuffer = internalBuffer;
-		this.context = context;
-		this.layoutSize = layoutSize;
 		this.size = size;
 	}
 	
-	public inline function uploadFromArray(value:Array<UInt>, offset:UInt = 0, length:UInt = 0)
-	{
-		context.uploadBufferFromArray16(this, value, offset, length);
-	}
 	
-	public function uploadFromBytes(value:Bytes)
-	{
-		
-	}
+	/* INTERFACE gl.bufferContext.IBuffer */
 	
-	public function dispose()
-	{
-		context.disposeBuffer(this);
-	}
+	public var data:BufferData;
+	
+	/* INTERFACE gl.bufferContext.IBuffer */
+	
+	public var isReadyForGL:Bool;
+	
+	public var vertexData:VertexData;
+	
+	public var stride:Int;
 }

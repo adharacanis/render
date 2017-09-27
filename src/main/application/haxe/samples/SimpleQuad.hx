@@ -2,7 +2,7 @@ package samples;
 
 import geometry.BaseGeometry;
 import gl.bufferContext.BufferContext;
-import gl.bufferContext.VertexBuffer;
+import gl.bufferContext.buffer.VertexBuffer;
 
 class SimpleQuad 
 {

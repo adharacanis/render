@@ -1,7 +1,7 @@
 package;
 import gl.bufferContext.AttributeType;
 import gl.bufferContext.IBuffer;
-import gl.bufferContext.VertexBuffer;
+import gl.bufferContext.buffer.VertexBuffer;
 import js.html.webgl.RenderingContext;
 
 class TestShader

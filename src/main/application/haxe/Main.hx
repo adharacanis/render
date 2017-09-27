@@ -11,7 +11,8 @@ import gl.Driver;
 import gl.bufferContext.AttributeType;
 import gl.bufferContext.BufferType;
 import gl.bufferContext.IndexBuffer;
-import gl.bufferContext.VertexBuffer;
+import gl.bufferContext.VertexData;
+import gl.bufferContext.buffer.VertexBuffer;
 import haxe.Timer;
 import haxe.ds.Vector;
 import haxe.io.Bytes;
@@ -33,7 +34,7 @@ class Main
 	var geometry:BaseGeometry;
 	var ppxTexture:PPXTexture;
 	
-	var vertBuffer:gl.bufferContext.VertexBuffer;
+	var vertBuffer:gl.bufferContext.buffer.VertexBuffer;
 	var positionLocation:Int;
 	
 	public static var instanced:Bool = false;
@@ -150,6 +151,11 @@ class Main
 		xx += 0.1;
 		Context.gl.uniform2f(uniformAnim, Math.sin(xx) * 7.6, Math.cos(xx) * 7.6);
 		
+		driver.bufferContext.bindBuffer(uvBuffer);
+		driver.bufferContext.bindBuffer(geometryBuffer);
+		driver.bufferContext.bindBuffer(positionBuffer);
+		driver.bufferContext.bindBuffer(colorBuffer);
+		
 		while(offset + count < instancesCount)
 		{
 			
@@ -211,9 +217,7 @@ class Main
 			}
 		}
 		
-		var buffer = driver.createVertexBuffer(Std.int(geometryData.length / 2), 2);
-		buffer.uploadFromArray(geometryData);
-		buffer.mapAttributes(0, 2, AttributeType.FLOAT, false, 8, 0);
+		var buffer = new VertexBuffer(Std.int(geometryData.length / 2), new VertexData(AttributeType.FLOAT, 2));
 		
 		return buffer;
 	}
@@ -240,9 +244,7 @@ class Main
 			}
 		}
 		
-		var buffer = driver.createVertexBuffer(Std.int(uvsData.length / 2), 2);
-		buffer.uploadFromArray(uvsData);
-		buffer.mapAttributes(1, 2, AttributeType.FLOAT, true, 8, 0);
+		var buffer = new VertexBuffer(Std.int(uvsData.length / 2), new VertexData(AttributeType.FLOAT, 2));
 		
 		return buffer;
 	}
@@ -301,8 +303,6 @@ class Main
 		}
 		
 		var buffer = driver.createVertexBuffer(instanceIdData.length, 1);
-		buffer.uploadFromArray(instanceIdData);
-		buffer.mapAttributes(4, 4, AttributeType.FLOAT, false, 16, 0);
 		
 		return buffer;
 	}
@@ -348,9 +348,7 @@ class Main
 			}
 		}
 		
-		var buffer = driver.createVertexBuffer(Std.int(positionsData.length / 2), 2);
-		buffer.uploadFromArray(positionsData);
-		buffer.mapAttributes(3, 2, AttributeType.FLOAT, false, 8, 0);
+		var buffer = new VertexBuffer(Std.int(positionsData.length / 2), new VertexData(AttributeType.FLOAT, 2, false));
 		
 		return buffer;
 	}
@@ -385,9 +383,7 @@ class Main
 			}
 		}
 		
-		var buffer = driver.createVertexBuffer(Std.int(colorsData.length / 2), 2);
-		buffer.uploadFromArray(colorsData);
-		buffer.mapAttributes(2, 4, AttributeType.FLOAT, false, 16, 0);
+		var buffer = new VertexBuffer(Std.int(colorsData.length / 2), new VertexData(AttributeType.FLOAT, 2));
 		
 		return buffer;
 	}
@@ -420,8 +416,7 @@ class Main
 			}
 		}
 		
-		var buffer = driver.bufferContext.createIndexBuffer(data.length, 1);
-		buffer.uploadFromArray(data);
-		
+		var buffer = new IndexBuffer(data.length);
+		//buffer.uploadFromArray(data);
 	}
 }

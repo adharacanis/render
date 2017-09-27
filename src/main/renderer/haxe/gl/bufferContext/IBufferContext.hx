@@ -1,7 +1,7 @@
 package gl.bufferContext;
 
 import gl.bufferContext.InternalBuffer;
-import gl.bufferContext.VertexBuffer;
+import gl.bufferContext.buffer.VertexBuffer;
 
 interface IBufferContext 
 {

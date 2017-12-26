@@ -37,8 +37,9 @@ class Main
 	var positionLocation:Int;
 	
 	public static var instanced:Bool = false;
-	public static var instancesCount:Int = 1625000;
-	var size:Float = 256 / 2 / 45;
+	public static var instancesCount:Int = 16251;
+	//public static var instancesCount:Int = 1625000;
+	var size:Float = 256 / 2 / 10;
 	var drawsCount:Int = 1;
 
 	public static function main()
@@ -98,7 +99,8 @@ class Main
 		
 		testShader = new TestShader();
 		testShader.create(Context.gl);
-		testShader.link(Context.gl);
+		positionBuffer = buildPositions();
+		testShader.link(Context.gl, positionsData);
 		
 		
 		trace('a_geometry ${Context.gl.getAttribLocation(testShader.shaderProgram, "a_geometry")}');
@@ -109,7 +111,7 @@ class Main
 		
 		geometryBuffer = buildGeometry();
 		uvBuffer = buildUVs();
-		positionBuffer = buildPositions();
+		
 		colorBuffer = buildColors();
 		instanceId = buildInstanceId();
 		buildIndexBuffer();
@@ -276,9 +278,10 @@ class Main
 		}
 		else
 		{
-			for (i in 0...instancesCount)
+			var i:Int = 0;
+			for (z in 0...Std.int(instancesCount / 2))
 			{
-				instanceIdData[registerIndex++] = 3;
+				/*instanceIdData[registerIndex++] = 3;
 				instanceIdData[registerIndex++] = 2;
 				instanceIdData[registerIndex++] = 1;
 				instanceIdData[registerIndex++] = 0;
@@ -296,9 +299,56 @@ class Main
 				instanceIdData[registerIndex++] = 3;
 				instanceIdData[registerIndex++] = 2;
 				instanceIdData[registerIndex++] = 1;
+				instanceIdData[registerIndex++] = 0;*/
+				
+				instanceIdData[registerIndex++] = i;
 				instanceIdData[registerIndex++] = 0;
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = i;
+				
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = 0;
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = i;
+				
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = 0;
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = i;
+				
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = 0;
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = i;
+				
+				
+				
+				
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = 1;
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = i;
+				
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = 1;
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = i;
+				
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = 1;
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = i;
+				
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = 1;
+				instanceIdData[registerIndex++] = i;
+				instanceIdData[registerIndex++] = i;
+				
+				i++;
 			}
 		}
+		
+		trace('instanceIdData = ${instanceIdData.length}');
 		
 		var buffer = driver.createVertexBuffer(instanceIdData.length, 1);
 		buffer.uploadFromArray(instanceIdData);
@@ -334,9 +384,8 @@ class Main
 			for (i in 0...instancesCount)
 			{
 				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
-				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
-				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
-				positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
+				//positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
+				//positionsData[registerIndex++] = halfW; positionsData[registerIndex++] = halfH;
 				
 				halfW += size * 2;
 				
@@ -348,11 +397,12 @@ class Main
 			}
 		}
 		
-		var buffer = driver.createVertexBuffer(Std.int(positionsData.length / 2), 2);
-		buffer.uploadFromArray(positionsData);
-		buffer.mapAttributes(3, 2, AttributeType.FLOAT, false, 8, 0);
+		trace('positionsData = ${positionsData.length}');
+		//var buffer = driver.createVertexBuffer(Std.int(positionsData.length / 2), 2);
+		//buffer.uploadFromArray(positionsData);
+		//buffer.mapAttributes(3, 2, AttributeType.FLOAT, false, 8, 0);
 		
-		return buffer;
+		return null;// buffer;
 	}
 	
 	var colorsData:Array<Float> = [];

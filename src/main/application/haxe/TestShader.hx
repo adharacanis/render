@@ -2,6 +2,7 @@ package;
 import gl.bufferContext.AttributeType;
 import gl.bufferContext.IBuffer;
 import gl.bufferContext.VertexBuffer;
+import js.html.webgl.ExtensionDebugShaders;
 import js.html.webgl.RenderingContext;
 
 class TestShader
@@ -50,6 +51,9 @@ class TestShader
 		var infoLog = gl.getShaderInfoLog(vertShader);
 		if (infoLog != null && infoLog.length != 0)
 			trace(infoLog);
+			
+		//var ext:ExtensionDebugShaders = gl.getExtension('WEBGL_debug_shaders');
+		//trace(ext.getTranslatedShaderSource(vertShader));
 		
 		gl.attachShader(shaderProgram, fragShader);
 		var infoLog = gl.getShaderInfoLog(fragShader);
@@ -67,7 +71,7 @@ class TestShader
 	}
 	
 	@:access(gl.bufferContext)
-	public function link(gl:RenderingContext)
+	public function link(gl:RenderingContext, posBuffer:Array<Float>)
 	{
 		//gl.clearColor(0.5, 0.5, 0.5, 0.9);
 		//gl.viewport(0, 0, 800, 600);
@@ -83,9 +87,14 @@ class TestShader
 		//gl.bindAttribLocation(shaderProgram, geometryLocation, "geometry");
 		//gl.bindAttribLocation(shaderProgram, 1, "uv");
 		
+		trace("MAX VECTORS " + posBuffer.length);
+		trace(gl.getParameter(RenderingContext.MAX_VARYING_VECTORS));
+		trace(gl.getParameter(RenderingContext.MAX_VERTEX_UNIFORM_VECTORS));
+		
 		
 		gl.useProgram(shaderProgram);
 		gl.uniform4fv(gl.getUniformLocation(shaderProgram, "viewProjection"), createParallelProj(0, 768, 768, 0));
+		gl.uniform4fv(gl.getUniformLocation(shaderProgram, "padding"), posBuffer.slice(0, 4096));
 	}
 	
 }

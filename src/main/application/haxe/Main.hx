@@ -37,10 +37,12 @@ class Main
 	var positionLocation:Int;
 	
 	public static var instanced:Bool = false;
-	public static var instancesCount:Int = 1625000;// 1004 * 20;
+	public static var instancesCount:Int = 8188;// 1004 * 20;
 	//public static var instancesCount:Int = 1625000;
 	var size:Float = 256 / 2 / 52;
 	var drawsCount:Int = 1;
+	
+	var instCount:Int = 4094;
 
 	public static function main()
 	{
@@ -149,11 +151,11 @@ class Main
 	function onEnterFrame() 
 	{
 		var offset:Int = 0;
-		var count:Int = 502;
+		var count:Int = Std.int(instCount*2);
 		
 		xx += 0.1;
 		Context.gl.uniform2f(uniformAnim, Math.sin(xx) * 7.6, Math.cos(xx) * 7.6);
-		
+		var drw:Int = 0;
 		while(offset + count < instancesCount + 1)
 		{
 			
@@ -180,6 +182,7 @@ class Main
 			//geometryBuffer.doubleBuffer.swapBuffer();
 			//positionBuffer.doubleBuffer.swapBuffer();
 			//colorBuffer.doubleBuffer.swapBuffer();
+			drw++;
 		}
 		
 		//Context.instancedExtension.vertexAttribDivisorANGLE(1, 0);
@@ -351,7 +354,7 @@ class Main
 				
 				i++;
 				
-				if (i > 251)
+				if (i > instCount)
 					i = 0;
 			}
 		}

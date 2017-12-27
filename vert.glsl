@@ -4,7 +4,7 @@ precision highp int;
 uniform mediump vec4 viewProjection;
 
 
-uniform mediump vec4 padding[251];
+uniform mediump vec4 padding[4094];
 uniform mediump vec2 animation;
 
 //attribute mediump vec2 padding;
@@ -21,7 +21,7 @@ vec2 getPaddingValue(vec4 vertex, int index);
 void main(void) 
 {
 	uv = a_uv;
-	color = a_color + (id / 502.0);
+	color = a_color + (id / 8188.0);
 	int column = int(id.x);
 	int row = int(id.y);
 	vec4 paddingVector = padding[column];

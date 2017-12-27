@@ -37,9 +37,9 @@ class Main
 	var positionLocation:Int;
 	
 	public static var instanced:Bool = false;
-	public static var instancesCount:Int = 16251;
+	public static var instancesCount:Int = 1625000;// 1004 * 20;
 	//public static var instancesCount:Int = 1625000;
-	var size:Float = 256 / 2 / 10;
+	var size:Float = 256 / 2 / 52;
 	var drawsCount:Int = 1;
 
 	public static function main()
@@ -100,7 +100,7 @@ class Main
 		testShader = new TestShader();
 		testShader.create(Context.gl);
 		positionBuffer = buildPositions();
-		testShader.link(Context.gl, positionsData);
+		testShader.link(Context.gl);
 		
 		
 		trace('a_geometry ${Context.gl.getAttribLocation(testShader.shaderProgram, "a_geometry")}');
@@ -138,21 +138,23 @@ class Main
 		}
 		
 		uniformAnim = Context.gl.getUniformLocation(testShader.shaderProgram, "animation");
+		paddingLocation = Context.gl.getUniformLocation(testShader.shaderProgram, "padding");
 		
 		frameRunner.start();
 	}
 	
 	var uniformAnim:UniformLocation;
+	var paddingLocation:UniformLocation;
 	var xx:Float = 0;
 	function onEnterFrame() 
 	{
 		var offset:Int = 0;
-		var count:Int = 16250;
+		var count:Int = 502;
 		
 		xx += 0.1;
 		Context.gl.uniform2f(uniformAnim, Math.sin(xx) * 7.6, Math.cos(xx) * 7.6);
 		
-		while(offset + count < instancesCount)
+		while(offset + count < instancesCount + 1)
 		{
 			
 			
@@ -167,7 +169,10 @@ class Main
 					
 					//colorBuffer.uploadFromArray(colorsData);
 					//colorBuffer.mapAttributes(2, 4, AttributeType.FLOAT, true, 16, 0);
-				
+				Context.gl.uniform4fv(paddingLocation, positionsData.slice(offset * 2, offset * 2 + count * 2));
+				//Context.gl.uniform4fv(paddingLocation, positionsData.slice(0, count * 2));
+				//driver.update(offset, count);
+				//Context.gl.uniform4fv(paddingLocation, positionsData.slice(count * 2, count * 2 + count * 2));
 				driver.update(offset, count);
 				offset += count;
 			
@@ -345,6 +350,9 @@ class Main
 				instanceIdData[registerIndex++] = i;
 				
 				i++;
+				
+				if (i > 251)
+					i = 0;
 			}
 		}
 		

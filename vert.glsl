@@ -21,7 +21,7 @@ vec2 getPaddingValue(vec4 vertex, int index);
 void main(void) 
 {
 	uv = a_uv;
-	color = vec4(1, 1, 1, 1);//a_color * (id / 16.0 - 0.4) + 0.5;
+	color = a_color + (id / 502.0);
 	int column = int(id.x);
 	int row = int(id.y);
 	vec4 paddingVector = padding[column];

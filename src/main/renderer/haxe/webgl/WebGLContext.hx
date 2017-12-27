@@ -25,9 +25,9 @@ class WebGLContext implements IGLContext
 	
 	public function update(offset:Int, count:Int):Void
 	{
-		gl.clearColor(0, 0, 0, 1);
+		//gl.clearColor(0, 0, 0, 1);
 		//gl.colorMask(false, false, false, true);
-		gl.clear(RenderingContext.COLOR_BUFFER_BIT);
+		//gl.clear(RenderingContext.COLOR_BUFFER_BIT);
 		
 		if(Main.instanced == false)
 			gl.drawElements(RenderingContext.TRIANGLES, 6 * count, RenderingContext.UNSIGNED_SHORT, 0);

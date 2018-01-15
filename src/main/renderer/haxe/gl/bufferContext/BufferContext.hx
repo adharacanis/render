@@ -2,43 +2,29 @@ package gl.bufferContext;
 
 import gl.Context;
 import gl.bufferContext.InternalBuffer;
+import haxe.ds.Vector;
 
 class BufferContext implements IBufferContext 
 {
 	public var context:Context;
+	public var usedVertexBuffersList:Vector<IBuffer> = new Vector(20);
 	
-	public var currentInternalBuffer:InternalBuffer;
+	var bufferManager:BaseBufferManager;
 
 	public function new(context:Context) 
 	{
 		this.context = cast context;
-	}
-	
-	public inline function createIndexBuffer(size:UInt, registersPerVertex:UInt):IndexBuffer
-	{
-		var intenralBuffer:InternalBuffer = context.createBuffer();
-		var vertexBuffer:IndexBuffer = new IndexBuffer(size, registersPerVertex, intenralBuffer, this);
-		
-		return vertexBuffer;
-	}
-	
-	public inline function createVertexBuffer(size:UInt, registersPerVertex:UInt):VertexBuffer
-	{
-		var doubleBuffer:DoubleBuffer = new DoubleBuffer(context.createBuffer(), context.createBuffer());
-		var vertexBuffer:VertexBuffer = new VertexBuffer(size, registersPerVertex, doubleBuffer, this);
-		
-		return vertexBuffer;
+		this.bufferManager = new SimpleBufferManager(context);
 	}
 	
 	@:allow(gl) public function disposeBuffer(buffer:IBuffer):Void
 	{
-		var internalBuffer:InternalBuffer = buffer.internalBuffer;
-		context.disposeBuffer(internalBuffer);
+		
 	}
 	
-	public inline function uploadBufferFromArray2(buffer:IBuffer, value:Array<Float>, offset:UInt = 0, length:UInt = 0)
+	inline function uploadBufferFromArray2(buffer:IBuffer, value:Array<Float>, offset:UInt = 0, length:UInt = 0)
 	{
-		var type:BufferType = buffer.type;
+		/*var type:BufferType = buffer.type;
 		var usage:BufferUsage = buffer.usage;
 		
 		useBuffer(type, buffer.internalBuffer);
@@ -51,13 +37,13 @@ class BufferContext implements IBufferContext
 		if(offset == 0)
 			context.uploadBufferSubData(type, value, offset);
 		else
-			context.uploadBufferSubData(type, value, offset);
+			context.uploadBufferSubData(type, value, offset);*/
 	}
 	
 	@:overload( function( buffer:IBuffer, value:Array<UInt>, offset:UInt = 0, length:UInt = 0 ) : Void {} )
-	public inline function uploadBufferFromArray(buffer:IBuffer, value:Array<Float>, offset:UInt = 0, length:UInt = 0)
+	inline public function uploadBufferFromArray(buffer:IBuffer, value:Array<Float>, offset:UInt = 0, length:UInt = 0)
 	{
-		var type:BufferType = buffer.type;
+		/*var type:BufferType = buffer.type;
 		var usage:BufferUsage = buffer.usage;
 		
 		useBuffer(type, buffer.internalBuffer);
@@ -71,11 +57,12 @@ class BufferContext implements IBufferContext
 			context.uploadBufferData(type, value, usage);
 		else
 			context.uploadBufferSubData(type, value, offset);
+			*/
 	}
 	
-	public inline function uploadBufferFromArray16(buffer:IBuffer, value:Array<UInt>, offset:UInt = 0, length:UInt = 0)
+	inline function uploadBufferFromArray16(buffer:IBuffer, value:Array<UInt>, offset:UInt = 0, length:UInt = 0)
 	{
-		var type:BufferType = buffer.type;
+		/*var type:BufferType = buffer.type;
 		var usage:BufferUsage = buffer.usage;
 		
 		useBuffer(type, buffer.internalBuffer);
@@ -86,23 +73,18 @@ class BufferContext implements IBufferContext
 			size = value.length;
 			
 		if(offset == 0)
-			context.uploadBufferData16(type, value, usage);
+			context.uploadBufferData16(type, value, usage);*/
 	}
 	
 	public inline function mapAttributes(buffer:IBuffer, locationToBind:Int, size:Int, attributeType:AttributeType, normalized:Bool = false, stride:Int = 0, offset:Int = 0)
 	{
-		useBuffer(buffer.type, buffer.internalBuffer);
+		useBuffer(buffer);
 		context.enableVertexAttribArray(locationToBind);
 		context.vertexAttribPointer(locationToBind, size, attributeType, normalized, stride, offset);
 	}
 	
-	public inline function useBuffer(type:BufferType, buffer:InternalBuffer)
+	public inline function useBuffer(buffer:IBuffer)
 	{
-		if (currentInternalBuffer == buffer)
-			return;
-			
-		currentInternalBuffer = buffer;
-		
-		context.useBuffer(type, buffer);
+		bufferManager.useBuffer(buffer);
 	}
 }

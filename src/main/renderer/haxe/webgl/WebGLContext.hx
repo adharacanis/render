@@ -29,10 +29,10 @@ class WebGLContext implements IGLContext
 		//gl.colorMask(false, false, false, true);
 		//gl.clear(RenderingContext.COLOR_BUFFER_BIT);
 		
-		if(Main.instanced == false)
+		//if(Main.instanced == false)
 			gl.drawElements(RenderingContext.TRIANGLES, 6 * count, RenderingContext.UNSIGNED_SHORT, 0);
-		else
-			instancedExtension.drawElementsInstancedANGLE(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0, count);
+		//else
+		//	instancedExtension.drawElementsInstancedANGLE(RenderingContext.TRIANGLES, 6, RenderingContext.UNSIGNED_SHORT, 0, count);
 			
 			//Main.instancesCount += 10;
 		//trace(Main.instancesCount);

@@ -64,6 +64,6 @@ class SampleBase
 	
 	public function onUpdate(e:Event):Void 
 	{
-		driver.update();
+		driver.update(0, 0);
 	}
 }

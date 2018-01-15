@@ -28,7 +28,7 @@ import texture.PPXTexture;
 @:access(haxe.io.Bytes)
 class Main 
 {
-	var driver:Driver;
+	/*var driver:Driver;
 	var testShader:TestShader;
 	var geometry:BaseGeometry;
 	var ppxTexture:PPXTexture;
@@ -307,7 +307,7 @@ class Main
 				instanceIdData[registerIndex++] = 3;
 				instanceIdData[registerIndex++] = 2;
 				instanceIdData[registerIndex++] = 1;
-				instanceIdData[registerIndex++] = 0;*/
+				instanceIdData[registerIndex++] = 0;/
 				
 				instanceIdData[registerIndex++] = i;
 				instanceIdData[registerIndex++] = 0;
@@ -484,5 +484,5 @@ class Main
 		var buffer = driver.bufferContext.createIndexBuffer(data.length, 1);
 		buffer.uploadFromArray(data);
 		
-	}
+	}*/
 }

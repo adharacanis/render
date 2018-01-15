@@ -36,6 +36,8 @@ class SimplePPXTexture extends SampleBase
 		var texture:TextureBase = new PPXTexture(data);
 		
 		texture.uploadToGL(WebGLContext.gl);
+		
+		trace('build scene');
 	}
 	
 	override public function onUpdate(e:Event):Void 

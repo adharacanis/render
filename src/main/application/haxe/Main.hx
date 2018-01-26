@@ -5,7 +5,7 @@ import events.DataEvent;
 import events.Event;
 import external.DataLoader;
 import external.data.PPXData;
-import geometry.BaseGeometry;
+import geometry_old.BaseGeometry;
 import gl.Context;
 import gl.Driver;
 import gl.bufferContext.AttributeType;

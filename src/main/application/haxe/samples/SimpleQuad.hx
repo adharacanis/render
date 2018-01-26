@@ -1,6 +1,6 @@
 package samples;
 
-import geometry.BaseGeometry;
+import geometry_old.BaseGeometry;
 import gl.bufferContext.BufferContext;
 import gl.bufferContext.VertexBuffer;
 

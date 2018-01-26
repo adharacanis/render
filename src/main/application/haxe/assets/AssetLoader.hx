@@ -1,4 +1,5 @@
 package assets;
+
 import assets.AssetsStorage;
 import events.DataEvent;
 import events.Event;
@@ -7,6 +8,7 @@ import external.DataLoader;
 import haxe.io.Bytes;
 import js.html.XMLHttpRequestResponseType;
 
+@:access(haxe.io.Bytes)
 class AssetLoader extends Observer
 {
 	var loadQue:Array<String> = [];
@@ -78,7 +80,7 @@ class AssetLoader extends Observer
 		var fileName:String = currentLoading.substring(slashIndex, currentLoading.length - 4);
 		var extension:String = currentLoading.substr(currentLoading.length - 3, 3);
 		
-		var data:Bytes = e.data;
+		var data:Bytes = new Bytes(e.data);
 		
 		assetsStorage.addAsset(fileName, extension, data);
 		

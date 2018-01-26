@@ -6,7 +6,7 @@ class VertexBuffer extends BaseBuffer
 {
 	var layoutSize:UInt;
 	
-	public function new(size:UInt, layoutSize:UInt) 
+	public function new(size:UInt = 0, layoutSize:UInt = 0) 
 	{
 		super(BufferType.VERTEX_BUFFER, BufferUsage.STREAM);
 		

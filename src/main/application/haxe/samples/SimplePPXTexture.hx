@@ -2,6 +2,7 @@ package samples;
 import assets.BinaryAsset;
 import events.Event;
 import external.data.PPXData;
+import geometry.QuadGeometry;
 import gl.bufferContext.data.BufferDataSource;
 import haxe.io.Bytes;
 import js.html.compat.ArrayBuffer;
@@ -21,13 +22,6 @@ class SimplePPXTexture extends SampleBase
 	public function new() 
 	{
 		super();
-		
-		var arr:ArrayBuffer = new ArrayBuffer();
-		var b:Bytes = Bytes.alloc(123);
-		b.getInt32(0);
-		b.setInt32(0, 1234);
-		
-		return;
 	}
 	
 	override function buildAssetsList() 
@@ -45,7 +39,9 @@ class SimplePPXTexture extends SampleBase
 		var data:PPXData = new PPXData(asset.content);
 		var texture:TextureBase = new PPXTexture(data);
 		
-		texture.uploadToGL(WebGLContext.gl);
+		
+		
+		var quad:QuadGeometry = new QuadGeometry();
 	}
 	
 	override public function onUpdate(e:Event):Void 

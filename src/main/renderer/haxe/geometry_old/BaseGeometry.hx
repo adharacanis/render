@@ -33,10 +33,13 @@ class BaseGeometry
 	public var indexBuffer:IndexBuffer;
 	public var vertexBuffer:VertexBuffer;
 	
-	public function new() 
+	function new(trianglesCount:Int = 0, verticesCount:Int = 0, isStatic:Bool = false) 
 	{
-		vertices = [];
-		indices = [];
+		this.verticesCount = verticesCount;
+		this.trianglesCount = trianglesCount;
+		
+		vertices = new Vector.<Float>(verticesCount * 4, isStatic);
+		indecis = new Vector.<UInt>(trianglesCount * 3, isStatic);
 	}
 	
 	/**

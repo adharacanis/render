@@ -1,21 +1,20 @@
 package geometry;
 
-class QuadGeometry extends Geometry 
-{
-	/**
-	 * геометрия - представление вертексов и вероятно мап индексов(но не факт)
-	 * 
-	 * нужно иметь предсавление для программы например а,б,ц,д вертексы с позициями с которыми можно работать
-	 * и представление бинарное котрое можно сразу передать в буфер либо батч
-	 */
-	
-	var a:Vertex = new Vertex();
-	var b:Vertex = new Vertex();
-	var c:Vertex = new Vertex();
-	var d:Vertex = new Vertex();
-	
+class QuadGeometry extends Geometry<Vertex>
+{	
 	public function new() 
 	{
 		super();
+	}
+	
+	override public function build() 
+	{
+		var a:Vertex = new Vertex(-1, -1);
+		var b:Vertex = new Vertex(1, -1);
+		var c:Vertex = new Vertex(1, 1);
+		var d:Vertex = new Vertex(-1, 1);
+		
+		vertices.push(a); vertices.push(b);
+		vertices.push(c); vertices.push(d);
 	}
 }
